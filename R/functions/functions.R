@@ -84,7 +84,7 @@ cmbn.fls <- function(file){
 ###############################################
 Process.strp <- function(file, time){
   b <- read.table(file, row.names = NULL)
-  b.df <- ddply(b, .(row.names), summarise, Area = sum(Area)) 
+  b.df <- ddply(b, .(row.names), summarise, Area = sum(Area)) # some strips were ripped off so aggregate
   b.df$time <- time
   
   # chamber number
