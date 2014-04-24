@@ -173,3 +173,54 @@ bxplts <- function(value, ofst = 0, data){
   boxplot(y^(1/3) ~ temp*Time, main = "power(1/3)", data)
 }
 
+#############################################
+# compare different auto-correlation models #
+#############################################
+atcr.cmpr <- function(model){
+  model2 <- update(model,corr=corCompSymm(form=~1|Chamber/Location))
+  model3 <- update(model,correlation=corARMA(q=2))
+  model4 <- update(model,correlation=corAR1()) 
+  model5 <- update(model,correlation=corARMA(q=1))
+  a <- anova(model,model2,model3,model4,model5)
+  models <- list(model, model2, model3, model4, model5, a)
+  return(models)
+}
+
+############################
+# make a summary dataframe #
+############################
+Crt_SmryDF <- function(data){
+  x <- data$value
+  Mean <- mean(x, na.rm = TRUE)
+  SE <- ci(x, na.rm = TRUE)[[4]]
+  data.frame(Mean, SE)
+}
+
+te <-  ddply(iem.mlt, .(Time, date, temp, Chamber, variable), Crt_SmryDF)
+
+data = subset(te, variable == "no")
+ylab ="test"
+# function which plots Chamber mean and SE
+PltChmMean <- function(data, ylab){
+  p <- ggplot(data, aes(x = date, y = Mean, col = Chamber, linetype = Chamber))
+  
+  p + geom_line(size = 1) + 
+    geom_errorbar(aes(ymin = Mean - SE, ymax = Mean + SE, col = Chamber), width = 5) + 
+    scale_color_manual(values = palette(), "Chamber", labels = paste("Chamber", c(1:12), sep = "_")) +
+    scale_linetype_manual(values = rep(c("solid", "dashed"), 6), 
+                          "Chamber", labels = paste("Chamber", c(1:12), sep = "_")) +
+    labs(x = "Time", y = ylab)
+}
+
+
+
+# function which plots co2 mean and SE
+plt.co2.mean <- function(data, ylab){
+  p <- ggplot(data, aes(x = date, y = Mean, col = co2))
+  
+  p + geom_line(size = 1) + 
+    geom_errorbar(aes(ymin = Mean - SE, ymax = Mean + SE, col = co2), width = 5) + 
+    scale_color_manual(values = c("blue", "red"), "CO2 trt", labels = c("Ambient", "eCO2")) +
+    labs(x = "Time", y = ylab) +
+    geom_vline(xintercept = as.numeric(as.Date("2012-09-18")), linetype = "dashed")
+}
