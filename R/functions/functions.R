@@ -135,7 +135,7 @@ MdlSmpl <- function(model){
 # Create a summary table #
 ##########################
 CreateTable <- function(dataset, fac){
-  #dataset=iem for chamber summary, ChMean for co2 summary, fac = Chamber or temp, nutrient=no/nh/po
+  #dataset=iem for chamber summary, ChMean for temp trt summary, fac = Chamber or temp, nutrient=no/nh/po
   a <- dataset[c("date", fac, "value")] #extract required columns
   colnames(a) <- c("date","variable","value") #change column names for cast
   means <- cast(a, date~variable, mean, na.rm = TRUE) 
@@ -189,11 +189,12 @@ atcr.cmpr <- function(model){
 ############################
 # make a summary dataframe #
 ############################
-Crt_SmryDF <- function(data){
-  x <- data$value
+Crt_SmryDF <- function(data, val = "value"){
+  x <- data[ ,val]
   Mean <- mean(x, na.rm = TRUE)
   SE <- ci(x, na.rm = TRUE)[[4]]
-  data.frame(Mean, SE)
+  N  <- sum(!is.na(x))
+  data.frame(Mean, SE, N)
 }
 
 ############################
@@ -209,13 +210,13 @@ PltChmMean <- function(data, ylab){
                           "Chamber", labels = paste("Chamber", c(1:12), sep = "_")) +
     labs(x = "Time", y = ylab)
 }
-########################
-# plot co2 mean and SE #
-########################
+#############################
+# plot Temp trt mean and SE #
+#############################
 PltTmpMean <- function(data, ylab){
-  p <- ggplot(data, aes(x = date, y = Mean, col = co2))
+  p <- ggplot(data, aes(x = date, y = Mean, col = temp))
   p + geom_line(size = 1) + 
-    geom_errorbar(aes(ymin = Mean - SE, ymax = Mean + SE, col = co2), width = 5) + 
-    scale_color_manual(values = c("blue", "red"), "CO2 trt", labels = c("Ambient", "eCO2")) +
+    geom_errorbar(aes(ymin = Mean - SE, ymax = Mean + SE, col = temp), width = 5) + 
+    scale_color_manual(values = c("blue", "red"), "Temp trt", labels = c("Ambient", "eTemp")) +
     labs(x = "Time", y = ylab)
 }
