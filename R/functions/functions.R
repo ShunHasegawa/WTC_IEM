@@ -93,6 +93,9 @@ Process.strp <- function(file, time){
   b.df$chamber <- factor(ifelse(b.df$row.names %in%  c(1:3), ch, 
                                 ifelse(b.df$row.names %in%  c(4:6), ch + 1, 
                                        ch + 2)))
+  b.df$location <- factor(ifelse(b.df$row.names %in%  c(1, 4, 7), 1, 
+                                 ifelse(b.df$row.names %in%  c(2, 5, 8), 2, 
+                                        3)))
   # variable type
   b.df$variable <- gsub(".*/|_.*", "", a) # before "/" and after "_" part are removed
   return(b.df)
