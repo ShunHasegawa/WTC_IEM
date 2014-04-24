@@ -20,7 +20,7 @@ lapply(1:3, function(x) ggsave(filename = fls[x], plot = TrtFg[[x]], width = 6, 
 # labels for facet_grid
 ylabs <- list(
   'no' = expression(NO[3]^"-"-N),
-  'nh' = expression(NH[4]^"3+"-N),
+  'nh' = expression(NH[4]^"+"-N),
   'po' = expression(PO[4]^"3-"-P))
 
 ylab_label <- function(variable, value){
