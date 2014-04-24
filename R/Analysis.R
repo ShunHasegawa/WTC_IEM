@@ -50,6 +50,7 @@ atcr.cmpr(m1)
 # no need for auto-correlation
 
 # random factor structure
+iem$id <- iem$Chamber:iem$Location
 m2 <- lme(log(po + .0001) ~ temp * Time, random = ~1|id, data = iem)
 anova(m1, m2)
 
