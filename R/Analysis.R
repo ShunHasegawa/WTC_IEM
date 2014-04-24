@@ -29,69 +29,36 @@ iem$date <- as.Date(ave(apply(cbind(iem$insertion, iem$sampling), 1, mean), iem$
 #################
 # Summary table #
 #################
-iem.mlt <- melt(iem, id = c("Time", "insertion", "sampling", "Chamber", "Location", "temp", "date"))
+source("R//SummaryExlTable.R")
 
-# chamber mean
-ChSmmryTbl <- dlply(iem.mlt, .(variable), function(x) CreateTable(x, fac = "Chamber"))
-
-# treat mean
-ChMean <- ddply(iem.mlt, .(Time, date, temp, Chamber, variable), summarise, value = mean(value, na.rm = TRUE)) 
-TrtSmmryTbl <- dlply(ChMean, .(variable), function(x) CreateTable(x, fac = "temp"))
-
-# export as excel file
-
-# create xcel workbook
-wb <- createWorkbook()
-
-# worksheet for rowdata
-sheet <- createSheet(wb,sheetName="row_data")
-addDataFrame(iem, sheet, showNA=TRUE, row.names=FALSE, characterNA="NA")
-
-# worksheets for chamber summary
-shnames <- paste("Chamber_mean.",c("Nitrate","Ammonium","Phosphate", sep=""))
-l_ply(1:3, function(x) crSheet(sheetname = shnames[x], dataset = ChSmmryTbl[[x]]))
-
-# worksheets for temp trt summary
-shnames <- paste("Temp_mean.", c("Nitrate", "Ammonium", "Phosphate"), sep = "")
-l_ply(1:3, function(x) crSheet(sheetname = shnames[x], dataset = TrtSmmryTbl[[x]]))
-
-#save file
-saveWorkbook(wb,"Output/Table/WTC_IEM.xlsx")
+#########
+# Stats #
+#########
 
 #############
 # Phosphate #
 #############
+bxplts(value= "po", ofst= .0001, data= iem)
 
-## Stats ##
-names(iem)
-summary(subset(iem, po < max(po)))
-boxplot(log(po+0.0001) ~ temp:Time, data = subset(iem, po < max(po)))
-boxplot(log(po+0.0001) ~ temp:Time, data = iem)
+# log transformation seems best
 
-boxplot(sqrt(no) ~ temp:Time, data = subset(iem, no < max(no)))
-boxplot(no ~ temp:Time, data = iem)
-boxplot(nh ~ temp:Time, data = subset(iem, nh < max(nh)))
-
-iem$id <- iem$Chamber:iem$Location
-
-m1 <- lme(log(po+0.0001) ~ temp * Time, random = ~ 1|Chamber/Location, data = iem, method = "ML", subset = po < max(po))
-m1 <- lme(log(po+0.0001) ~ temp * Time, random = ~ 1|Chamber/Location, data = iem, method = "ML")
-m1 <- lme((po+0.0001)^(1/3) ~ temp * Time, random = ~ 1|Chamber/Location, data = iem, method = "ML", subset = po < max(po))
-Anova(m1)
-
-qqnorm(residuals(m1))
-qqline(residuals(m1))
+# autocorelation
+m1 <- lme(log(po + .0001) ~ temp * Time, random = ~1|Chamber/Location, data = iem)
 
 
-m2 <- lme(log(po+0.0001) ~ temp * Time, random = ~ 1|id, data = iem, method = "ML")
-m3 <- lme(log(po+0.0001) ~ temp * Time, random = ~ 1|Chamber/id, data = iem, method = "ML")
-anova(m1, m2, m3)
-summary(m2)
+atcr.cmpr(m1)
+# no need for auto-correlation
 
-m2 <- update(m1, ~.- temp:Time)
-drop1(m1, test = "Chi")
-Anova(m2)
-plot(allEffects(m1), x.var= "temp")
+# random factor structure
+m2 <- lme(log(po + .0001) ~ temp * Time, random = ~1|id, data = iem)
+anova(m1, m2)
 
-## Table ##
+# m2 is slightly better, between-chamber variation is less important within-chanmber (=between location within chamber)
+MdlSmpl(m2)
+m3 <- update(m2, ~ . -temp:Time)
+MdlSmpl(m3)
+Fml <- MdlSmpl(m3)$model.reml
+Anova(Fml)
+plot(allEffects(Fml))
+
 ## Figs ##
