@@ -117,3 +117,59 @@ cmbn.strp <- function(dates){
   a.cmb <- ldply(a, function(x) Process.strp(x, time = gsub(".*//", "", files))) # process and combine them all
   return(a.cmb)
 }
+
+#######################
+#model simplification #
+#######################
+MdlSmpl <- function(model){
+  mod2 <- update(model, method = "ML") #change method from REML to ML
+  stai <- stepAIC(mod2, trace = FALSE) #model simplification by AIC
+  dr <- drop1(stai, test="Chisq") #test if removing a factor even more significantly lowers model
+  model <- update(stai, method="REML")
+  ifelse(all(dr[[4]] < 0.05, na.rm=TRUE), anr <- anova(model), anr<-NA) 
+  #dr[[4]]<0.05-->unable to remove any more factors so finlize the results by changsing the method back to REML
+  return(list(step.aic = stai$anova, drop1 = dr, anova.reml = anr, model.reml = model, model.ml = stai))
+}
+
+##########################
+# Create a summary table #
+##########################
+CreateTable <- function(dataset, fac){
+  #dataset=iem for chamber summary, ChMean for co2 summary, fac = Chamber or temp, nutrient=no/nh/po
+  a <- dataset[c("date", fac, "value")] #extract required columns
+  colnames(a) <- c("date","variable","value") #change column names for cast
+  means <- cast(a, date~variable, mean, na.rm = TRUE) 
+  ses <- cast(a,date~variable,function(x) ci(x,na.rm=TRUE)[4])
+  colnames(ses)[2:ncol(ses)] <- paste(colnames(ses)[2:ncol(ses)],"SE",sep=".")
+  samples <- cast(a,date~variable,function(x) sum(!is.na(x))) #sample size
+  colnames(samples)[2:ncol(samples)] <- paste(colnames(samples)[2:ncol(samples)],"N",sep=".")
+  mer <- Reduce(function(...) merge(..., by = "date"), list(means, ses, samples)) #merge datasets
+  mer <- mer[,c(1, order(names(mer)[-grep("date|N", names(mer))])+1, grep("N", names(mer)))] #re-order columns
+  return(mer)
+}
+
+#function which creates excel worksheets
+crSheet <- function(sheetname, dataset, fac, nutrient){
+  #create sheet
+  sheet <- createSheet(wb, sheetName = sheetname)
+  
+  #add data to the sheet
+  addDataFrame(CreateTable(dataset,fac,nutrient),sheet,showNA=TRUE,row.names=FALSE,startRow=2)
+  
+  #title of the sheet
+  addDataFrame(t(c(sheetname,"unit=ug cm^(-2) day^(-1))")),sheet,startRow=1,row.names=FALSE,col.names=FALSE)
+}
+
+###########################################
+# produce box plots with transformed data #
+###########################################
+# log OR sqrt OR power(1/3)
+bxplts <- function(value, ofst = 0, data){
+  par(mfrow = c(2,2))
+  y <- data[[value]] + ofst #ofst is added to make y >0
+  boxplot(y ~ co2*time, data)
+  boxplot(log(y) ~ co2*time, main = "log", data)
+  boxplot(sqrt(y) ~ co2*time, main = "sqrt", data)
+  boxplot(y^(1/3) ~ co2*time, main = "power(1/3)", data)
+}
+
