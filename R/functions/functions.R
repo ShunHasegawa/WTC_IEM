@@ -90,10 +90,10 @@ Process.strp <- function(file, time){
   # chamber number
   a <- gsub("(_.{1,2}[.]xls)", "", file) # after "_" part is removed
   ch <- as.numeric(gsub(".*_", "", a)) # "_" and before part is removed
-  b.df$chamber <- factor(ifelse(b.df$row.names %in%  c(1:3), ch, 
+  b.df$chamber <- as.numeric(ifelse(b.df$row.names %in%  c(1:3), ch, 
                                 ifelse(b.df$row.names %in%  c(4:6), ch + 1, 
                                        ch + 2)))
-  b.df$location <- factor(ifelse(b.df$row.names %in%  c(1, 4, 7), 1, 
+  b.df$location <- as.numeric(ifelse(b.df$row.names %in%  c(1, 4, 7), 1, 
                                  ifelse(b.df$row.names %in%  c(2, 5, 8), 2, 
                                         3)))
   # variable type

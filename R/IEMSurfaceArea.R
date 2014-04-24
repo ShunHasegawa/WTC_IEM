@@ -1,6 +1,5 @@
 rm(list=ls(all=TRUE))
 
-library(xlsx)
 library(plyr)
 library(reshape)
 library(car)
@@ -13,12 +12,9 @@ results <- ldply(dates, cmbn.strp)
 
 ftable(xtabs(~ time + chamber + variable + location, data = results))
 
-# Dec2013 P_5.2 has two values so combine them
-results <- ddply(results, .(time, ring, row.names, variable), summarise, Area = sum(Area))
-
 # reshape table
 names(results)[grep("Area", names(results))] <- "value"
-names(results)[grep("row", names(results))] <- "plot" # cast does not work the column name "row.names".
-rst.cst <- cast(results, time + ring + plot ~ variable)
+results$row.names <- NULL # cast does not work the column name "row.names".
+rst.cst <- cast(results, time + chamber + location ~ variable)
 
 write.csv(rst.cst, "Output//Data/Result_WTC.IEM.SurfaceArea.csv", row.names = FALSE)
