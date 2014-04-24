@@ -78,3 +78,30 @@ cmbn.fls <- function(file){
   pr.cst <- cast(pr.df, Date + ring + plot ~ Test.Name)
   return(pr.cst)
 }
+
+###############################################
+# read and combine strip surface area results #
+###############################################
+Process.strp <- function(file, time){
+  b <- read.table(file, row.names = NULL)
+  b.df <- ddply(b, .(row.names), summarise, Area = sum(Area)) 
+  b.df$time <- time
+  
+  # chamber number
+  a <- gsub("(_.{1,2}[.]xls)", "", file) # after "_" part is removed
+  ch <- as.numeric(gsub(".*_", "", a)) # "_" and before part is removed
+  b.df$chamber <- factor(ifelse(b.df$row.names %in%  c(1:3), ch, 
+                                ifelse(b.df$row.names %in%  c(4:6), ch + 1, 
+                                       ch + 2)))
+  # variable type
+  b.df$variable <- gsub(".*/|_.*", "", a) # before "/" and after "_" part are removed
+  return(b.df)
+}
+
+# combine the processed results with their dates
+cmbn.strp <- function(dates){
+  files <- paste("Data//Strips//", dates, sep = "") # choose folder
+  a <- dir(files, full.names = TRUE) # files in the folder to be read
+  a.cmb <- ldply(a, function(x) Process.strp(x, time = gsub(".*//", "", files))) # process and combine them all
+  return(a.cmb)
+}
