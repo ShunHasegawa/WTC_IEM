@@ -196,11 +196,9 @@ Crt_SmryDF <- function(data){
   data.frame(Mean, SE)
 }
 
-te <-  ddply(iem.mlt, .(Time, date, temp, Chamber, variable), Crt_SmryDF)
-
-data = subset(te, variable == "no")
-ylab ="test"
-# function which plots Chamber mean and SE
+############################
+# Plot Chamber mean and SE #
+############################
 PltChmMean <- function(data, ylab){
   p <- ggplot(data, aes(x = date, y = Mean, col = Chamber, linetype = Chamber))
   
@@ -211,16 +209,13 @@ PltChmMean <- function(data, ylab){
                           "Chamber", labels = paste("Chamber", c(1:12), sep = "_")) +
     labs(x = "Time", y = ylab)
 }
-
-
-
-# function which plots co2 mean and SE
-plt.co2.mean <- function(data, ylab){
+########################
+# plot co2 mean and SE #
+########################
+PltTmpMean <- function(data, ylab){
   p <- ggplot(data, aes(x = date, y = Mean, col = co2))
-  
   p + geom_line(size = 1) + 
     geom_errorbar(aes(ymin = Mean - SE, ymax = Mean + SE, col = co2), width = 5) + 
     scale_color_manual(values = c("blue", "red"), "CO2 trt", labels = c("Ambient", "eCO2")) +
-    labs(x = "Time", y = ylab) +
-    geom_vline(xintercept = as.numeric(as.Date("2012-09-18")), linetype = "dashed")
+    labs(x = "Time", y = ylab)
 }
