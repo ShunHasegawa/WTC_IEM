@@ -200,9 +200,11 @@ Crt_SmryDF <- function(data, val = "value"){
 ############################
 # Plot Chamber mean and SE #
 ############################
-PltChmMean <- function(data, ylab){
+PltChmMean <- function(data){
   p <- ggplot(data, aes(x = date, y = Mean, col = Chamber, linetype = Chamber))
-  
+  ylab <- ifelse(unique(data$variable) == "no", expression(NO[3]^"-"-N~(mu*g~cm^-2~day^-1)), 
+                 ifelse(unique(data$variable) == "nh", expression(NH[4]^"+"-N~(mu*g~cm^-2~day^-1)), 
+                        expression(PO[4]^"3-"-P~(mu*g~cm^-2~day^-1))))
   p + geom_line(size = 1) + 
     geom_errorbar(aes(ymin = Mean - SE, ymax = Mean + SE, col = Chamber), width = 5) + 
     scale_color_manual(values = palette(), "Chamber", labels = paste("Chamber", c(1:12), sep = "_")) +
@@ -210,11 +212,15 @@ PltChmMean <- function(data, ylab){
                           "Chamber", labels = paste("Chamber", c(1:12), sep = "_")) +
     labs(x = "Time", y = ylab)
 }
+
 #############################
 # plot Temp trt mean and SE #
 #############################
-PltTmpMean <- function(data, ylab){
+PltTmpMean <- function(data){
   p <- ggplot(data, aes(x = date, y = Mean, col = temp))
+  ylab <- ifelse(unique(data$variable) == "no", expression(NO[3]^"-"-N~(mu*g~cm^-2~day^-1)), 
+                 ifelse(unique(data$variable) == "nh", expression(NH[4]^"+"-N~(mu*g~cm^-2~day^-1)), 
+                        expression(PO[4]^"3-"-P~(mu*g~cm^-2~day^-1))))
   p + geom_line(size = 1) + 
     geom_errorbar(aes(ymin = Mean - SE, ymax = Mean + SE, col = temp), width = 5) + 
     scale_color_manual(values = c("blue", "red"), "Temp trt", labels = c("Ambient", "eTemp")) +
