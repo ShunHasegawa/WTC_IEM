@@ -149,15 +149,15 @@ CreateTable <- function(dataset, fac){
 }
 
 #function which creates excel worksheets
-crSheet <- function(sheetname, dataset, fac, nutrient){
+crSheet <- function(sheetname, dataset, fac){
   #create sheet
   sheet <- createSheet(wb, sheetName = sheetname)
   
   #add data to the sheet
-  addDataFrame(CreateTable(dataset,fac,nutrient),sheet,showNA=TRUE,row.names=FALSE,startRow=2)
+  addDataFrame(CreateTable(dataset,fac), sheet, showNA = TRUE, row.names = FALSE, startRow = 2)
   
   #title of the sheet
-  addDataFrame(t(c(sheetname,"unit=ug cm^(-2) day^(-1))")),sheet,startRow=1,row.names=FALSE,col.names=FALSE)
+  addDataFrame(t(c(sheetname, "unit=ug cm^(-2) day^(-1))")), sheet, startRow = 1, row.names = FALSE, col.names = FALSE)
 }
 
 ###########################################
