@@ -167,9 +167,9 @@ crSheet <- function(sheetname, dataset){
 bxplts <- function(value, ofst = 0, data){
   par(mfrow = c(2,2))
   y <- data[[value]] + ofst #ofst is added to make y >0
-  boxplot(y ~ co2*time, data)
-  boxplot(log(y) ~ co2*time, main = "log", data)
-  boxplot(sqrt(y) ~ co2*time, main = "sqrt", data)
-  boxplot(y^(1/3) ~ co2*time, main = "power(1/3)", data)
+  boxplot(y ~ temp*Time, data)
+  boxplot(log(y) ~ temp*Time, main = "log", data)
+  boxplot(sqrt(y) ~ temp*Time, main = "sqrt", data)
+  boxplot(y^(1/3) ~ temp*Time, main = "power(1/3)", data)
 }
 
