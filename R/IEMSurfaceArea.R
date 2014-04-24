@@ -3,24 +3,9 @@ rm(list=ls(all=TRUE))
 library(xlsx)
 library(plyr)
 library(reshape)
+library(car)
 
-
-Process.strp <- function(file, time){
-  b <- read.table(file, row.names = NULL)
-  b.df <- ddply(b, .(row.names), summarise, Area = sum(Area)) 
-  b.df$time <- time
-  b.df$ring <- gsub(".*_|[.].*", "", file) # bofore "/" and after "_" parts were removed from strings
-  b.df$variable <- gsub(".*/|_.*", "", file)
-  return(b.df)
-}
-
-# combine the processed results with their dates
-cmbn.strp <- function(dates){
-  files <- paste("Data//Strips//", dates, sep = "") # choose folder
-  a <- dir(files, full.names = TRUE) # files in the folder to be read
-  a.cmb <- ldply(a, function(x) Process.strp(x, time = gsub(".*//", "", files))) # process and combine them all
-  return(a.cmb)
-}
+source("R//functions//functions.R")
 
 dates <- dir("Data/Strips/")
 
