@@ -38,7 +38,14 @@ Crrtct.ccv.df <- function(filename, ccval = 7.5){
   # reorder accoding to time
   mrg.res <- mrg.res[order(mrg.res$times), ]
   
+  # add the latest ccv value at the end of data frame to make sure all measured values are placed between ccvs
+  # if the last line is not ccv, vlues after last ccv will be turned into NA
   ccv.ps <- grep("V$", as.character(mrg.res$Sample.ID))
+  lstTime <- mrg.res$times[nrow(mrg.res)]
+  mrg.res[nrow(mrg.res) + 1, ] <- mrg.res[max(ccv.ps), ] 
+  mrg.res$times[nrow(mrg.res)] <- lstTime + 1 # make the last time latest by adding 1 to the actual latest time
+  
+  ccv.ps <- grep("V$", as.character(mrg.res$Sample.ID)) # update ccv.position
   
   # re-caluculate the results
   a <- ldply(1:(length(ccv.ps)-1), function(x) Crrct.ccv(x, data = mrg.res, ccval))
@@ -59,10 +66,12 @@ prcsAQ2 <- function(data){
   
   # turn this into data frame
   a.df <- ldply(a)
-  names(a.df)[c(1, 4, 5)] <- c("Date", "ring", "plot")
+  names(a.df)[c(1, 4, 5)] <- c("Date", "chamber", "location")
   a.df$Date <- ymd(a.df$Date)
   res.df <- cbind(a.df, res)
-  res.df <- res.df[c("Date", "ring", "plot", "Result")]
+  res.df <- res.df[c("Date", "chamber", "location", "Result")]
+  res.df$chamber <- as.numeric(res.df$chamber)
+  res.df$location <- as.numeric(res.df$location)
   return(res.df)
 }
 
@@ -75,7 +84,7 @@ cmbn.fls <- function(file){
   
   # reshape
   names(pr.df)[5] <- "value"
-  pr.cst <- cast(pr.df, Date + ring + plot ~ Test.Name)
+  pr.cst <- cast(pr.df, Date + chamber + location ~ Test.Name)
   return(pr.cst)
 }
 
