@@ -4,6 +4,33 @@
 %% source files & libraries & setup options                                  %%
 %% need to be loaded here if one wants to compile this child document to PDF %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+<<setup, include=FALSE>>=
+opts_chunk$set(concordance = TRUE, warning = FALSE, tidy = TRUE, tidy.opts = list(width.cutoff = 60))
+opts_knit$set(root.dir=normalizePath('../'))
+@
+
+<<readFiles, include=FALSE>>=
+library(car)
+library(gmodels)
+library(lme4)
+library(lubridate)
+library(MASS)
+library(nlme)
+library(packrat)
+library(plyr)
+library(reshape)
+library(xlsx)
+library(contrast)
+library(effects)
+library(ggplot2)
+library(xtable)
+source("R/functions/functions.R")
+load("Output//Data//WTC_IEM.RData")
+source("R/SummaryExlTable.R")
+source("R/Figs.R")
+@
+
 \subsection{Phosphate}
 
 %%% Temp %%%
@@ -22,7 +49,8 @@ TrtFg[[3]]
 <<poTempTbl, echo = FALSE, results='asis'>>=
 print(xtable(TrtSmmryTbl[[3]],
              caption = "Temp mean for IEM-adsorbed Phosphate",
-             label = "table:Temp.IEM.PO",align = rep("l", 8)),
+             label = "table:Temp.IEM.PO",align = rep("l", 8),
+             digits = 4),
       caption.placement = "top",
       include.rownames= FALSE,
       table.placement = "H")
@@ -83,19 +111,21 @@ ChFg[[3]]
 <<POChamberTbl, echo = FALSE, results='asis'>>=
 print(xtable(ChSmmryTbl[[3]][,1:13],
              caption = "Chamber means for IEM-adsorbed Phosphate",
-             label = "table:chamber.iem.PO",align = rep("l", 14)),
+             label = "table:chamber.iem.PO",align = rep("l", 14),
+             digits = 4),
       caption.placement = "top",
       include.rownames= FALSE,
       table.placement = "H",
-      size = "small")
+      size = "tiny")
 print(xtable(ChSmmryTbl[[3]][,c(1, 14:25)],
-             align = rep("l", 14)),
+             align = rep("l", 14),
+             digits = 4),
       include.rownames= FALSE,
       table.placement = "H",
-      size = "small")
+      size = "tiny")
 print(xtable(ChSmmryTbl[[3]][,c(1, 26:37)],
              align = rep("l", 14)),
       include.rownames= FALSE,
       table.placement = "H",
-      size = "small")
+      size = "tiny")
 @
