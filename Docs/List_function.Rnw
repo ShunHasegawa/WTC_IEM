@@ -7,13 +7,14 @@
 MdlSmpl <- function(model){
   mod2 <- update(model, method = "ML") #change method from REML to ML
   stai <- stepAIC(mod2, trace = FALSE) #model simplification by AIC
-  dr <- drop1(stai, test="Chisq") #test if removing a factor even more significantly lowers model
+  dr <- drop1(stai, test="Chisq") 
+  #test if removing a factor even more significantly lowers model
   model <- update(stai, method="REML")
   ifelse(all(dr[[4]] < 0.05, na.rm=TRUE), anr <- anova(model), anr<-NA) 
-  #dr[[4]]<0.05-->unable to remove any more factors so finlize the results by changsing the method back to REML
+  #dr[[4]]<0.05-->unable to remove any more factors so finlize 
+  #the results by changsing the method back to REML
   return(list(step.aic = stai$anova, drop1 = dr, anova.reml = anr, model.reml = model, model.ml = stai))
 }
-
 
 # produce box plots with transformed data #
 # log OR sqrt OR power(1/3)
@@ -47,47 +48,4 @@ atcr.cmpr <- function(model, rndmFac){
   models <- list(model, model2, model3, model4, model5, a)
   return(models)
 }
-
-
-# Plot Chamber mean and SE #
-PltChmMean <- function(data){
-  p <- ggplot(data, aes(x = date, y = Mean, col = Chamber, linetype = Chamber))
-  ylab <- ifelse(unique(data$variable) == "no", expression(NO[3]^"-"-N~(mu*g~cm^-2~day^-1)), 
-                 ifelse(unique(data$variable) == "nh", expression(NH[4]^"+"-N~(mu*g~cm^-2~day^-1)), 
-                        expression(PO[4]^"3-"-P~(mu*g~cm^-2~day^-1))))
-  p + geom_line(size = 1) + 
-    geom_errorbar(aes(ymin = Mean - SE, ymax = Mean + SE, col = Chamber), width = 5) + 
-    scale_color_manual(values = palette(), "Chamber", labels = paste("Chamber", c(1:12), sep = "_")) +
-    scale_linetype_manual(values = rep(c("solid", "dashed"), 6), 
-                          "Chamber", labels = paste("Chamber", c(1:12), sep = "_")) +
-    labs(x = "Time", y = ylab)
-}
-
-# plot Temp trt mean and SE #
-PltTmpMean <- function(data){
-  p <- ggplot(data, aes(x = date, y = Mean, col = temp))
-  ylab <- ifelse(unique(data$variable) == "no", expression(NO[3]^"-"-N~(mu*g~cm^-2~day^-1)), 
-                 ifelse(unique(data$variable) == "nh", expression(NH[4]^"+"-N~(mu*g~cm^-2~day^-1)), 
-                        expression(PO[4]^"3-"-P~(mu*g~cm^-2~day^-1))))
-  p + geom_line(size = 1) + 
-    geom_errorbar(aes(ymin = Mean - SE, ymax = Mean + SE, col = temp), width = 5) + 
-    scale_color_manual(values = c("blue", "red"), "Temp trt", labels = c("Ambient", "eTemp")) +
-    labs(x = "Time", y = ylab)
-}
-
-# create table of contrast results #
-cntrstTbl <- function(cntrstRes, data){
-  d <- unique(data$date)
-  ds <- format(d, format = "%b-%Y")
-  
-  Df <- data.frame(
-    date = ds,
-    contrast  =  cntrst$Contrast,
-    SE = cntrst$SE,
-    t = cntrst$testStat,
-    df = cntrst$df,
-    P.value = cntrst$Pvalue)
-  return(Df)
-}
-
 @
