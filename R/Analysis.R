@@ -44,17 +44,17 @@ bxplts(value= "po", ofst= .0001, data= iem)
 
 # autocorelation
 m1 <- lme(log(po + .0001) ~ temp * Time, random = ~1|Chamber/Location, data = iem)
-
-
 atcr.cmpr(m1)
 # no need for auto-correlation
 
 # random factor structure
 iem$id <- iem$Chamber:iem$Location
 m2 <- lme(log(po + .0001) ~ temp * Time, random = ~1|id, data = iem)
-anova(m1, m2)
+m3 <- lme(log(po + .0001) ~ temp * Time, random = ~1|Chamber, data = iem)
+anova(m1, m2, m3)
+summary(m3)
 
-# m2 is slightly better, between-chamber variation is less important within-chanmber (=between location within chamber)
+# m3 is slightly better, between-chamber variation is less important within-chanmber (=between location within chamber)
 MdlSmpl(m2)
 m3 <- update(m2, ~ . -temp:Time)
 MdlSmpl(m3)
