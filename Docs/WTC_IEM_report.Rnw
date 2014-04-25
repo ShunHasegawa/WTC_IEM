@@ -10,8 +10,29 @@
 
 \begin{document}
 
+<<setup, include=FALSE>>=
+opts_chunk$set(concordance = TRUE, warning = FALSE, tidy = TRUE, tidy.opts = list(width.cutoff = 60))
+opts_knit$set(root.dir=normalizePath('../'))
+@
+
+\maketitle
+\clearpage
+\tableofcontents
+\clearpage
+
+%%%
+%%%
+%%%
+
+\section{Ion exchange membrane}
+
+<<echo=TRUE, results='asis', include=TRUE>>=
+source("R//Analysis.R")
+@
 
 
-
+%%%%%%%%%%%
+% Nitrate %
+%%%%%%%%%%%
 
 \end{document}
