@@ -25,6 +25,7 @@ iem$sampling <- as.Date(dmy(iem$sampling))
 iem <- iem[complete.cases(iem), ]
 iem <- droplevels(iem)
 iem$date <- as.Date(ave(apply(cbind(iem$insertion, iem$sampling), 1, mean), iem$Time), origin = origin) # same date for same date
+iem$id <- iem$Chamber:iem$Location
 save(iem, file = "Output//Data/WTC_IEM.RData")
 
 #################

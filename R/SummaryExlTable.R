@@ -1,4 +1,4 @@
-iem.mlt <- melt(iem, id = c("Time", "insertion", "sampling", "Chamber", "Location", "temp", "date"))
+iem.mlt <- melt(iem, id = c("Time", "insertion", "sampling", "Chamber", "Location", "temp", "date", "id"))
 
 # chamber mean
 ChSmmryTbl <- dlply(iem.mlt, .(variable), function(x) CreateTable(x, fac = "Chamber"))
