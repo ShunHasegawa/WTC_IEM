@@ -5,25 +5,25 @@
 %% need to be loaded here if one wants to compile this child document to PDF %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\subsection{Ammonium}
 
 %%% Temp %%%
 \subsubsection{Temp trt}
 
-\begin{figure}[!h]\label{figure:temp.iem.no}
+\begin{figure}[!h]\label{figure:temp.iem.nh}
 \begin{center}
 
-<<NOTempFig, echo=FALSE, fig.height=3, fig.width=6>>=
-# ring_nitrate
-TrtFg[[1]]
+<<NHTempFig, echo=FALSE, fig.height=3, fig.width=6>>=
+TrtFg[[2]]
 @
-\caption{IEM-adsorbed Nitrate at temperature treatments}
+\caption{IEM-adsorbed Ammonium at temperature treatments}
 \end{center}
 \end{figure}
 
-<<NOTempTbl, echo = FALSE, results='asis'>>=
-print(xtable(TrtSmmryTbl[[1]],
-             caption = "Temp mean for IEM-adsorbed Nitrate",
-             label = "table:Temp.IEM.no",align = rep("l", 8)),
+<<NHTempTbl, echo = FALSE, results='asis'>>=
+print(xtable(TrtSmmryTbl[[2]],
+             caption = "Temp mean for IEM-adsorbed Ammonium",
+             label = "table:Temp.IEM.NH",align = rep("l", 8)),
       caption.placement = "top",
       include.rownames= FALSE,
       table.placement = "H")
@@ -33,29 +33,36 @@ print(xtable(TrtSmmryTbl[[1]],
 \paragraph{Stats}
 \noindent
 
-<<NOTempStat, echo = TRUE, results='markup'>>=
-bxplts(value= "no",  data= iem)
-# sqrt looks better
+<<NHTempStat, echo = TRUE, results='markup'>>=
+bxplts(value= "nh",  data= iem)
 
-m1 <- lme(sqrt(no) ~ temp * Time, random = ~1|Chamber/Location, data = iem)
-m2 <- lme(sqrt(no) ~ temp * Time, random = ~1|id, data = iem)
-m3 <- lme(sqrt(no) ~ temp * Time, random = ~1|Chamber, data = iem)
+# remove one obvious outlier
+nhDat <- subset(iem, nh < max(nh))
+
+bxplts(value= "nh",  data= nhDat)
+
+# log seemes slightly better
+
+m1 <- lme(log(nh) ~ temp * Time, random = ~1|Chamber/Location, data = nhDat)
+m2 <- lme(log(nh) ~ temp * Time, random = ~1|id, data = nhDat)
+m3 <- lme(log(nh) ~ temp * Time, random = ~1|Chamber, data = nhDat)
 anova(m1, m2, m3)
+# m2 (or m3) is slightly better than m1
 
-# m2 looks better
-
-# autocorrelation
+# auutocorrelation
 atcr.cmpr(m2, rndmFac= "id")
-# model3 looks the best
-mAt <- atcr.cmpr(m2, rndmFac= "id")[[3]]
+
+# model2 looks better
+mAt <- atcr.cmpr(m2, rndmFac= "id")[[2]]
 
 # model simplification
 MdlSmpl(mAt)
 
-# unable to remove any factors
 Fml <- MdlSmpl(mAt)$model.reml
+
 # The final model is
-lme(sqrt(no) ~ temp * Time, random = ~1|id, correlation=corARMA(q=2), data = iem)
+lme(log(nh) ~ Time, random = ~1|id, corr=corCompSymm(form=~1|id), data = nhDat)
+
 summary(Fml)
 Anova(Fml)
 
@@ -66,45 +73,35 @@ qqnorm(residuals.lm(Fml))
 qqline(residuals.lm(Fml))
 @
 
-\noindent Compare the treatments at each time points
-<<NOTempContrast, echo = FALSE, results='asis'>>=
-# contrast
-cntrst<- contrast(Fml, 
-                  a = list(Time = levels(iem$Time), temp = "amb"),
-                  b = list(Time = levels(iem$Time), temp = "elev"))
-WTC_IEM_Nitrate_CntrstDf <- cntrstTbl(cntrst, iem)
-print(xtable(WTC_IEM_Nitrate_CntrstDf, floating = FALSE), include.rownames= FALSE)
-@
-
 %%% Chamber %%%
 \clearpage
 \subsubsection{Chamber}
 
-\begin{figure}[!h]\label{figure:chamber.iem.no}
+\begin{figure}[!h]\label{figure:chamber.iem.nh}
 \begin{center}
 
-<<NOChamberFig, echo=FALSE, fig.height=3.5, fig.width=6>>=
+<<NHChamberFig, echo=FALSE, fig.height=3.5, fig.width=6>>=
 # ring_Phosphate
-ChFg[[1]]
+ChFg[[2]]
 @
-\caption{IEM-adsorbed Nitrate (Chamber means)}
+\caption{IEM-adsorbed Ammonium (Chamber means)}
 \end{center}
 \end{figure}
 
-<<NOChamberTbl, echo = FALSE, results='asis'>>=
-print(xtable(ChSmmryTbl[[1]][,1:13],
-             caption = "Chamber means for IEM-adsorbed Nitrate",
-             label = "table:chamber.iem.no",align = rep("l", 14)),
+<<NHChamberTbl, echo = FALSE, results='asis'>>=
+print(xtable(ChSmmryTbl[[2]][,1:13],
+             caption = "Chamber means for IEM-adsorbed Ammonium",
+             label = "table:chamber.iem.NH",align = rep("l", 14)),
       caption.placement = "top",
       include.rownames= FALSE,
       table.placement = "H",
       size = "small")
-print(xtable(ChSmmryTbl[[1]][,c(1, 14:25)],
+print(xtable(ChSmmryTbl[[2]][,c(1, 14:25)],
              align = rep("l", 14)),
       include.rownames= FALSE,
       table.placement = "H",
       size = "small")
-print(xtable(ChSmmryTbl[[1]][,c(1, 26:37)],
+print(xtable(ChSmmryTbl[[2]][,c(1, 26:37)],
              align = rep("l", 14)),
       include.rownames= FALSE,
       table.placement = "H",
