@@ -61,7 +61,14 @@ source("R/Figs.R")
 %%%%%%%%%%%%%
 % Phosphate %
 %%%%%%%%%%%%%
-\claerpage
+\clearpage
 \Sexpr{knit_child('IEM_Phosphate.Rnw')}
+
+%%%%%%%%%%%%%
+% Functions %
+%%%%%%%%%%%%%
+\clearpage
+\Sexpr{knit_child('List_function.Rnw')}
+
 
 \end{document}
