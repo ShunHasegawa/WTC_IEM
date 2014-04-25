@@ -11,7 +11,7 @@ m3 <- lme(log(po + .0001) ~ temp * Time, random = ~1|Chamber, data = iem)
 anova(m1, m2, m3)
 
 # autocorelation
-atcr.cmpr(m3)
+atcr.cmpr(m3, rndmFac="Chamber")
 # no need for auto-correlation
 
 # m3 is slightly better, between-chamber variation is less important within-chanmber (=between location within chamber)
