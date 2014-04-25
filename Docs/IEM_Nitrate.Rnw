@@ -4,8 +4,7 @@
 %% source files & libraries & setup options                                  %%
 %% need to be loaded here if one wants to compile this child document to PDF %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
+\subsection{Nitrate}
 %%% Temp %%%
 \subsubsection{Temp trt}
 
@@ -13,7 +12,6 @@
 \begin{center}
 
 <<NOTempFig, echo=FALSE, fig.height=3, fig.width=6>>=
-# ring_nitrate
 TrtFg[[1]]
 @
 \caption{IEM-adsorbed Nitrate at temperature treatments}
