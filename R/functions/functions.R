@@ -176,8 +176,17 @@ bxplts <- function(value, ofst = 0, data){
 #############################################
 # compare different auto-correlation models #
 #############################################
-atcr.cmpr <- function(model){
-  model2 <- update(model,corr=corCompSymm(form=~1|Chamber/Location))
+atcr.cmpr <- function(model, rndmFac){
+  if(rndmFac == "Chamber/Location"){
+    model2 <- update(model,corr=corCompSymm(form=~1|Chamber/Location)) 
+  } else {
+    if(rndmFac == "Chamber"){
+      model2 <- update(model,corr=corCompSymm(form=~1|Chamber))
+    } else {
+      model2 <- update(model,corr=corCompSymm(form=~1|id))
+    }
+  }
+  
   model3 <- update(model,correlation=corARMA(q=2))
   model4 <- update(model,correlation=corAR1()) 
   model5 <- update(model,correlation=corARMA(q=1))
