@@ -145,6 +145,7 @@ CreateTable <- function(dataset, fac){
   colnames(samples)[2:ncol(samples)] <- paste(colnames(samples)[2:ncol(samples)],"N",sep=".")
   mer <- Reduce(function(...) merge(..., by = "date"), list(means, ses, samples)) #merge datasets
   mer <- mer[,c(1, order(names(mer)[-grep("date|N", names(mer))])+1, grep("N", names(mer)))] #re-order columns
+  mer$date <- as.character(mer$date) # date is turned into character for knitr output 
   return(mer)
 }
 
