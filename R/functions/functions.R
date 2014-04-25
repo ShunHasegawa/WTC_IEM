@@ -171,6 +171,7 @@ bxplts <- function(value, ofst = 0, data){
   boxplot(log(y) ~ temp*Time, main = "log", data)
   boxplot(sqrt(y) ~ temp*Time, main = "sqrt", data)
   boxplot(y^(1/3) ~ temp*Time, main = "power(1/3)", data)
+  par(mfrow = c(1,1))
 }
 
 #############################################
