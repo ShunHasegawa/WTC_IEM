@@ -1,0 +1,17 @@
+\documentclass[11pt]{article}
+
+\usepackage{fullpage}
+\usepackage{pdfpages}
+\usepackage{float}
+
+\title{WTC IEM results}
+\author{Shun Hasegawa}
+\date{\today}
+
+\begin{document}
+
+
+
+
+
+\end{document}
