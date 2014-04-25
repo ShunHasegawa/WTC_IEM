@@ -52,4 +52,23 @@ source("R/Figs.R")
 %%%%%%%%%%%
 \Sexpr{knit_child('IEM_Nitrate.Rnw')}
 
+%%%%%%%%%%%%
+% Ammonium %
+%%%%%%%%%%%%
+\clearpage
+\Sexpr{knit_child('IEM_Ammonium.Rnw')}
+
+%%%%%%%%%%%%%
+% Phosphate %
+%%%%%%%%%%%%%
+\claerpage
+\Sexpr{knit_child('IEM_Phosphate.Rnw')}
+
+%%%%%%%%%%%%%
+% functions %
+%%%%%%%%%%%%%
+%\clearpage
+%\Sexpr{knit_child('List_function.Rnw')}
+
+
 \end{document}
