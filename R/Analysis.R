@@ -41,26 +41,30 @@ source("R//SummaryExlTable.R")
 bxplts(value= "po", ofst= .0001, data= iem)
 
 # log transformation seems best
-
-# autocorelation
 m1 <- lme(log(po + .0001) ~ temp * Time, random = ~1|Chamber/Location, data = iem)
-atcr.cmpr(m1)
-# no need for auto-correlation
-
-# random factor structure
 iem$id <- iem$Chamber:iem$Location
 m2 <- lme(log(po + .0001) ~ temp * Time, random = ~1|id, data = iem)
 m3 <- lme(log(po + .0001) ~ temp * Time, random = ~1|Chamber, data = iem)
 anova(m1, m2, m3)
-summary(m3)
+
+# autocorelation
+atcr.cmpr(m3)
+# no need for auto-correlation
 
 # m3 is slightly better, between-chamber variation is less important within-chanmber (=between location within chamber)
-MdlSmpl(m2)
-m3 <- update(m2, ~ . -temp:Time)
 MdlSmpl(m3)
-Fml <- MdlSmpl(m3)$model.reml
+m4 <- update(m3, ~ . -temp:Time)
+MdlSmpl(m4)
+Fml <- MdlSmpl(m4)$model.reml
 Anova(Fml)
+summary(Fml)
 plot(allEffects(Fml))
+
+# model diagnostic
+plot(Fml)
+qqnorm(Fml, ~ resid(.)|Chamber, abline = c(0,1))
+qqnorm(residuals.lm(Fml))
+qqline(residuals.lm(Fml))
 
 ########
 # Figs #
