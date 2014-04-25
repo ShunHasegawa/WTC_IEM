@@ -1,0 +1,73 @@
+\Sexpr{set_parent('WTC_IEM_report.Rnw')}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% source files & libraries & setup options                                  %%
+%% need to be loaded here if one wants to compile this child document to PDF %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Phosphate}
+
+%%% Temp %%%
+\subsubsection{Temp trt}
+
+\begin{figure}[!h]\label{figure:temp.iem.po}
+\begin{center}
+
+<<POTempFig, echo=FALSE, fig.height=3, fig.width=6>>=
+TrtFg[[2]]
+@
+\caption{IEM-adsorbed Phosphate at temperature treatments}
+\end{center}
+\end{figure}
+
+<<poTempTbl, echo = FALSE, results='asis'>>=
+print(xtable(TrtSmmryTbl[[2]],
+             caption = "Temp mean for IEM-adsorbed Phosphate",
+             label = "table:Temp.IEM.PO",align = rep("l", 8)),
+      caption.placement = "top",
+      include.rownames= FALSE,
+      table.placement = "H")
+@
+
+%% Stats %%
+\paragraph{Stats}
+\noindent
+
+<<POTempStat, echo = TRUE, results='markup'>>=
+
+@
+
+%%% Chamber %%%
+\clearpage
+\subsubsection{Chamber}
+
+\begin{figure}[!h]\label{figure:chamber.iem.PO}
+\begin{center}
+
+<<POChamberFig, echo=FALSE, fig.height=3.5, fig.width=6>>=
+# ring_Phosphate
+ChFg[[2]]
+@
+\caption{IEM-adsorbed Phosphate (Chamber means)}
+\end{center}
+\end{figure}
+
+<<POChamberTbl, echo = FALSE, results='asis'>>=
+print(xtable(ChSmmryTbl[[2]][,1:13],
+             caption = "Chamber means for IEM-adsorbed Phosphate",
+             label = "table:chamber.iem.PO",align = rep("l", 14)),
+      caption.placement = "top",
+      include.rownames= FALSE,
+      table.placement = "H",
+      size = "small")
+print(xtable(ChSmmryTbl[[2]][,c(1, 14:25)],
+             align = rep("l", 14)),
+      include.rownames= FALSE,
+      table.placement = "H",
+      size = "small")
+print(xtable(ChSmmryTbl[[2]][,c(1, 26:37)],
+             align = rep("l", 14)),
+      include.rownames= FALSE,
+      table.placement = "H",
+      size = "small")
+@
