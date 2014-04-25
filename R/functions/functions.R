@@ -235,3 +235,20 @@ PltTmpMean <- function(data){
     scale_color_manual(values = c("blue", "red"), "Temp trt", labels = c("Ambient", "eTemp")) +
     labs(x = "Time", y = ylab)
 }
+
+####################################
+# create table of contrast results #
+####################################
+cntrstTbl <- function(cntrstRes, data){
+  d <- unique(data$date)
+  ds <- format(d, format = "%b-%Y")
+  
+  Df <- data.frame(
+    date = ds,
+    contrast  =  cntrst$Contrast,
+    SE = cntrst$SE,
+    t = cntrst$testStat,
+    df = cntrst$df,
+    P.value = cntrst$Pvalue)
+  return(Df)
+}
