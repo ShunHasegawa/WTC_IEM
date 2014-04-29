@@ -70,5 +70,10 @@ source("R/Figs.R")
 \clearpage
 \Sexpr{knit_child('List_function.Rnw')}
 
+%%%%%%%%%%%%%%%%
+% List of figs %
+%%%%%%%%%%%%%%%%
+\clearpage
+\listoffigures
 
 \end{document}
