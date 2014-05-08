@@ -24,7 +24,7 @@ plot(allEffects(Fml))
 
 # model diagnosis
 plot(Fml)
-qqnorm(Fml, ~ resid(.)|Chamber, abline = c(0,1))
+qqnorm(Fml, ~ resid(.)|Chamber)
 qqnorm(residuals.lm(Fml))
 qqline(residuals.lm(Fml))
 
