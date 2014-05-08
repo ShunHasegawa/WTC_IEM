@@ -4,7 +4,7 @@
 \usepackage{pdfpages}
 \usepackage{float}
 
-\title{WTC IEM results-Summry Stats-}
+\title{WTC IEM results-Detailed Stats-}
 \author{Shun Hasegawa}
 \date{\today}
 

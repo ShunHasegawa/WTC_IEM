@@ -42,18 +42,18 @@ source("R/Stats_P.R")
 read_chunk("R/Stats_P.R")
 @
 
-%%%%%%%%%%%%%
-%% Summary %%
-%%%%%%%%%%%%%
-
-<<Stat_WTC_IEM_Phosphate_Smmry, echo=TRUE, results='markup'>>=
-@
-
-% %%%%%%%%%%%%
-% %% Detail %%
-% %%%%%%%%%%%%
-% <<Stat_WTC_IEM_Phosphate, echo=TRUE, results='markup'>>=
+% %%%%%%%%%%%%%
+% %% Summary %%
+% %%%%%%%%%%%%%
+% 
+% <<Stat_WTC_IEM_Phosphate_Smmry, echo=TRUE, results='markup'>>=
 % @
+
+%%%%%%%%%%%%
+%% Detail %%
+%%%%%%%%%%%%
+<<Stat_WTC_IEM_Phosphate, echo=TRUE, results='markup'>>=
+@
 
 %%% Chamber %%%
 \clearpage
