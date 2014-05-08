@@ -4,21 +4,50 @@
 %% source files & libraries & setup options                                  %%
 %% need to be loaded here if one wants to compile this child document to PDF %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+<<setup, include=FALSE>>=
+opts_chunk$set(concordance = TRUE, warning = FALSE, tidy = TRUE, tidy.opts = list(width.cutoff = 60))
+opts_knit$set(root.dir=normalizePath('../'))
+@
+
+<<readFiles, include=FALSE>>=
+library(car)
+library(gmodels)
+library(lme4)
+library(lubridate)
+library(MASS)
+library(nlme)
+library(packrat)
+library(plyr)
+library(reshape)
+library(xlsx)
+library(contrast)
+library(effects)
+library(ggplot2)
+library(xtable)
+source("R/functions/functions.R")
+load("Output//Data//WTC_IEM.RData")
+source("R/SummaryExlTable.R")
+source("R/Figs.R")
+@
+
 \subsection{Nitrate}
+
+
 %%% Temp %%%
 \subsubsection{Temp trt}
 
 \begin{figure}[!h]\label{figure:temp.iem.no}
 \begin{center}
 
-<<NOTempFig, echo=FALSE, fig.height=3, fig.width=6>>=
+<<Fig_WTC_IEM_Nitrate_Temp, echo=FALSE, fig.height=3, fig.width=6>>=
 TrtFg[[1]]
 @
 \caption{IEM-adsorbed Nitrate at temperature treatments}
 \end{center}
 \end{figure}
 
-<<NOTempTbl, echo = FALSE, results='asis'>>=
+<<Tbl_WTC_IEM_Nitrate_Temp, echo = FALSE, results='asis'>>=
 print(xtable(TrtSmmryTbl[[1]],
              caption = "Temp mean for IEM-adsorbed Nitrate",
              label = "table:Temp.IEM.no",align = rep("l", 8)),
@@ -27,52 +56,30 @@ print(xtable(TrtSmmryTbl[[1]],
       table.placement = "H")
 @
 
-%% Stats %%
+%%%%%%%%%%%%%
+%%% Stats %%%
+%%%%%%%%%%%%%
+\clearpage
 \paragraph{Stats}
 \noindent
 
-<<NOTempStat, echo = TRUE, results='markup'>>=
-bxplts(value= "no",  data= iem)
-# sqrt looks better
-
-m1 <- lme(sqrt(no) ~ temp * Time, random = ~1|Chamber/Location, data = iem)
-m2 <- lme(sqrt(no) ~ temp * Time, random = ~1|id, data = iem)
-m3 <- lme(sqrt(no) ~ temp * Time, random = ~1|Chamber, data = iem)
-anova(m1, m2, m3)
-
-# m2 looks better
-
-# autocorrelation
-atcr.cmpr(m2, rndmFac= "id")
-# model3 looks the best
-mAt <- atcr.cmpr(m2, rndmFac= "id")[[3]]
-
-# model simplification
-MdlSmpl(mAt)
-
-# unable to remove any factors
-Fml <- MdlSmpl(mAt)$model.reml
-# The final model is
-lme(sqrt(no) ~ temp * Time, random = ~1|id, correlation=corARMA(q=2), data = iem)
-summary(Fml)
-Anova(Fml)
-
-# model diagnosis
-plot(Fml)
-qqnorm(Fml, ~ resid(.)|Chamber)
-qqnorm(residuals.lm(Fml))
-qqline(residuals.lm(Fml))
+<<<ReadScript_WTC_IEM_Nitrate, echo=FALSE, include=FALSE>>=
+source("R/Stats_NO.R")
+read_chunk("R/Stats_NO.R")
 @
 
-\noindent Compare the treatments at each time points
-<<NOTempContrast, echo = FALSE, results='asis'>>=
-# contrast
-cntrst<- contrast(Fml, 
-                  a = list(Time = levels(iem$Time), temp = "amb"),
-                  b = list(Time = levels(iem$Time), temp = "elev"))
-WTC_IEM_Nitrate_CntrstDf <- cntrstTbl(cntrst, iem)
-print(xtable(WTC_IEM_Nitrate_CntrstDf, floating = FALSE), include.rownames= FALSE)
+%%%%%%%%%%%%%
+%% Summary %%
+%%%%%%%%%%%%%
+
+<<Stat_WTC_IEM_Nitrate_Smmry, echo=TRUE, results='markup'>>=
 @
+
+% %%%%%%%%%%%%
+% %% Detail %%
+% %%%%%%%%%%%%
+% <<Stat_WTC_IEM_Nitrate, echo=TRUE, results='markup'>>=
+% @
 
 %%% Chamber %%%
 \clearpage
@@ -81,7 +88,7 @@ print(xtable(WTC_IEM_Nitrate_CntrstDf, floating = FALSE), include.rownames= FALS
 \begin{figure}[!h]\label{figure:chamber.iem.no}
 \begin{center}
 
-<<NOChamberFig, echo=FALSE, fig.height=3.5, fig.width=6>>=
+<<Fig_WTC_IEM_Nitrate_Chamber, echo=FALSE, fig.height=3.5, fig.width=6>>=
 # ring_Phosphate
 ChFg[[1]]
 @
@@ -89,7 +96,7 @@ ChFg[[1]]
 \end{center}
 \end{figure}
 
-<<NOChamberTbl, echo = FALSE, results='asis'>>=
+<<Tbl_WTC_IEM_Nitrate_Chamber, echo = FALSE, results='asis'>>=
 print(xtable(ChSmmryTbl[[1]][,1:13],
              caption = "Chamber means for IEM-adsorbed Nitrate",
              label = "table:chamber.iem.no",align = rep("l", 14)),

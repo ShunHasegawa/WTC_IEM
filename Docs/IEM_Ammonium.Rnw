@@ -12,14 +12,14 @@
 \begin{figure}[!h]\label{figure:temp.iem.nh}
 \begin{center}
 
-<<NHTempFig, echo=FALSE, fig.height=3, fig.width=6>>=
+<<Fig_WTC_IEM_Ammonium_Temp, echo=FALSE, fig.height=3, fig.width=6>>=
 TrtFg[[2]]
 @
 \caption{IEM-adsorbed Ammonium at temperature treatments}
 \end{center}
 \end{figure}
 
-<<NHTempTbl, echo = FALSE, results='asis'>>=
+<<Tbl_WTC_IEM_Ammonium_Temp, echo = FALSE, results='asis'>>=
 print(xtable(TrtSmmryTbl[[2]],
              caption = "Temp mean for IEM-adsorbed Ammonium",
              label = "table:Temp.IEM.NH",align = rep("l", 8)),
@@ -28,49 +28,30 @@ print(xtable(TrtSmmryTbl[[2]],
       table.placement = "H")
 @
 
-%% Stats %%
+%%%%%%%%%%%%%
+%%% Stats %%%
+%%%%%%%%%%%%%
+\clearpage
 \paragraph{Stats}
 \noindent
 
-<<NHTempStat, echo = TRUE, results='markup'>>=
-bxplts(value= "nh",  data= iem)
-
-# remove one obvious outlier
-nhDat <- subset(iem, nh < max(nh))
-
-bxplts(value= "nh",  data= nhDat)
-
-# log seemes slightly better
-
-m1 <- lme(log(nh) ~ temp * Time, random = ~1|Chamber/Location, data = nhDat)
-m2 <- lme(log(nh) ~ temp * Time, random = ~1|id, data = nhDat)
-m3 <- lme(log(nh) ~ temp * Time, random = ~1|Chamber, data = nhDat)
-anova(m1, m2, m3)
-# m2 (or m3) is slightly better than m1
-
-# auutocorrelation
-atcr.cmpr(m2, rndmFac= "id")
-
-# model2 looks better
-mAt <- atcr.cmpr(m2, rndmFac= "id")[[2]]
-
-# model simplification
-MdlSmpl(mAt)
-
-Fml <- MdlSmpl(mAt)$model.reml
-
-# The final model is
-lme(log(nh) ~ Time, random = ~1|id, corr=corCompSymm(form=~1|id), data = nhDat)
-
-summary(Fml)
-Anova(Fml)
-
-# model diagnosis
-plot(Fml)
-qqnorm(Fml, ~ resid(.)|Chamber)
-qqnorm(residuals.lm(Fml))
-qqline(residuals.lm(Fml))
+<<<ReadScript_WTC_IEM_Ammonium, echo=FALSE, include=FALSE>>=
+source("R/Stats_NH.R")
+read_chunk("R/Stats_NH.R")
 @
+
+%%%%%%%%%%%%%
+%% Summary %%
+%%%%%%%%%%%%%
+
+<<Stat_WTC_IEM_Ammonium_Smmry, echo=TRUE, results='markup'>>=
+@
+
+% %%%%%%%%%%%%
+% %% Detail %%
+% %%%%%%%%%%%%
+% <<Stat_WTC_IEM_Ammonium, echo=TRUE, results='markup'>>=
+% @
 
 %%% Chamber %%%
 \clearpage
@@ -79,7 +60,7 @@ qqline(residuals.lm(Fml))
 \begin{figure}[!h]\label{figure:chamber.iem.nh}
 \begin{center}
 
-<<NHChamberFig, echo=FALSE, fig.height=3.5, fig.width=6>>=
+<<Fig_WTC_IEM_Ammonium_Chamber, echo=FALSE, fig.height=3.5, fig.width=6>>=
 # ring_Phosphate
 ChFg[[2]]
 @
@@ -87,7 +68,7 @@ ChFg[[2]]
 \end{center}
 \end{figure}
 
-<<NHChamberTbl, echo = FALSE, results='asis'>>=
+<<Tbl_WTC_IEM_Ammonium_Chamber, echo = FALSE, results='asis'>>=
 print(xtable(ChSmmryTbl[[2]][,1:13],
              caption = "Chamber means for IEM-adsorbed Ammonium",
              label = "table:chamber.iem.NH",align = rep("l", 14)),
