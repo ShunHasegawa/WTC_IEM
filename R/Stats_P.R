@@ -1,5 +1,17 @@
 ## ----Stat_WTC_IEM_Phosphate
 
+
+
+
+
+
+
+
+
+
+
+
+
 bxplts(value= "po", ofst= .0001, data= iem)
 bxcxplts(value= "po", data= iem, sval = 0.0001, fval = .001)
 # use box-cox lambda
