@@ -60,3 +60,60 @@ Anova(Fml)
 # contrast
 WTC_IEM_Phosphate_CntrstDf
 
+#####################
+# tmep and moisture #
+#####################
+IEM_DF$yv  <- (IEM_DF$po + .0001)^(-0.2222)
+
+scatterplotMatrix(~po + yv + SoilVW_5_25_Mean  
+                  + SoilTemp10_Mean + SoilTemp10_Max + SoilTemp10_Min, data = IEM_DF, diag = "boxplot")
+
+m1 <- lme((po + .0001)^(-0.2222) ~ SoilTemp10_Min + Time, random = ~1|Chamber, data = IEM_DF)
+summary(m1)
+Anova(m1)
+
+plot(allEffects(m1))
+
+b <- update(a, ~. - Time:SoilTemp10_Min)
+anova(a, b)
+Anova(b)
+summary(b)
+
+
+
+m1 <- lm((po + .0001)^(-0.2222) ~ SoilTemp10_Min + Time, data = IEM_DF)
+Anova(m1)
+cf <- coef(m1)
+plot((po + .0001)^(-0.2222) ~ SoilTemp10_Min, data = IEM_DF, col = Time, 
+     pch = as.numeric(temp), cex = 2)
+
+abline(cf[1], cf[2], col = palette()[1], lwd = 3)
+sapply(c(3:5), function(x) abline(cf[1] + cf[x], cf[2], col = palette()[x-1], lwd = 3))
+
+
+install.packages("leaps")
+library(leaps)
+?regsubsets
+
+
+Anova(m1)
+
+m2 <- lm((po + .0001)^(-0.2222) ~ SoilTemp10_Min, data = IEM_DF)
+m2 <- lm((po + .0001)^(-0.2222) ~ SoilTemp10_Min, data = IEM_DF)
+summary(m2)
+plot(m2)
+Anova(m2)
+
+head(IEM_DF)
+
+d1 <- subset(IEM_DF, Time %in% c(1:3))
+d2 <- subset(IEM_DF, Time %in% c(2:4), select = c("po", "Chamber", "Time"))
+d2$Time <- factor(as.numeric(d2$Time) - 1)
+names(d2)[1] <- "po2"
+df <- merge(d1, d2, by = c("Time", "Chamber"))
+df$pdif <- (df$po + .0001)^(-0.2222)-(df$po2 + .0001)^(-0.2222)
+
+plot(pdif ~ SoilTemp10_Min, data = df, col = Time, 
+     pch = as.numeric(temp), cex = 2)
+
+
