@@ -91,29 +91,3 @@ abline(cf[1], cf[2], col = palette()[1], lwd = 3)
 sapply(c(3:5), function(x) abline(cf[1] + cf[x], cf[2], col = palette()[x-1], lwd = 3))
 
 
-install.packages("leaps")
-library(leaps)
-?regsubsets
-
-
-Anova(m1)
-
-m2 <- lm((po + .0001)^(-0.2222) ~ SoilTemp10_Min, data = IEM_DF)
-m2 <- lm((po + .0001)^(-0.2222) ~ SoilTemp10_Min, data = IEM_DF)
-summary(m2)
-plot(m2)
-Anova(m2)
-
-head(IEM_DF)
-
-d1 <- subset(IEM_DF, Time %in% c(1:3))
-d2 <- subset(IEM_DF, Time %in% c(2:4), select = c("po", "Chamber", "Time"))
-d2$Time <- factor(as.numeric(d2$Time) - 1)
-names(d2)[1] <- "po2"
-df <- merge(d1, d2, by = c("Time", "Chamber"))
-df$pdif <- (df$po + .0001)^(-0.2222)-(df$po2 + .0001)^(-0.2222)
-
-plot(pdif ~ SoilTemp10_Min, data = df, col = Time, 
-     pch = as.numeric(temp), cex = 2)
-
-
