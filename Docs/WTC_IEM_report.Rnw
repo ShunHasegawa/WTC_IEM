@@ -47,6 +47,20 @@ source("R/Figs.R")
 
 \section{Ion exchange membrane}
 
+%%%%%%%%%%%%%%%
+% summary fig %
+%%%%%%%%%%%%%%%
+\subsection{Summary results}
+\begin{center}
+\begin{figure}[!ht]\label{figure:WTC_IEM_Allres}
+
+\includegraphics[width=\textwidth]{../Output/Figs/WTC_IEM_Temp.pdf}
+
+\caption{IEM-adsorbed nutrients}
+
+\end{figure}
+\end{center}
+
 %%%%%%%%%%%
 % Nitrate %
 %%%%%%%%%%%
