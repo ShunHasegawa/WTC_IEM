@@ -11,3 +11,4 @@ Output/
 *.tex
 *.toc
 *.lof
+packrat/lib*/

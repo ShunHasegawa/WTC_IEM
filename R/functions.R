@@ -295,3 +295,19 @@ cntrstTbl <- function(cntrstRes, data){
     P.value = cntrst$Pvalue)
   return(Df)
 }
+
+##############################
+# Save ggplot in PDF and PNG #
+##############################
+ggsavePP <- function(filename, plot, width, height){
+  ggsave(filename = paste(filename, ".pdf", sep = ""), 
+         plot = plot, 
+         width = width, 
+         height = height)
+  
+  ggsave(filename = paste(filename, ".png", sep = ""), 
+         plot = plot, 
+         width = width, 
+         height = height, 
+         dpi = 600)
+}

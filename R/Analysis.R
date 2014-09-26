@@ -6,7 +6,6 @@ library(lme4)
 library(lubridate)
 library(MASS)
 library(nlme)
-library(packrat)
 library(plyr)
 library(reshape)
 library(xlsx)
@@ -14,7 +13,7 @@ library(contrast)
 library(effects)
 library(ggplot2)
 
-source("R/functions/functions.R")
+source("R/functions.R")
 
 iem <- read.csv("Data/WTC_IEM.csv", colClasses = c("Chamber" = "numeric", "Location" = "factor", "insertion" = "character", 
                                                    "sampling" = "character", "Time" = "factor"))

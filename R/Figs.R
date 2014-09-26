@@ -10,7 +10,7 @@ theme_set(theme_bw()) # graphic backgroud is white
 # plot each nutrient separately
 ChFg <- dlply(ChMean, .(variable), PltChmMean)
 fls <- paste("Output/Figs/WTC_IEM_Chamber_", c("Nitrate", "Ammonium", "phosphate"), ".pdf",sep = "")
-lapply(1:3, function(x) ggsave(filename = fls[x], plot = ChFg[[x]], width = 6, height = 3))
+lapply(1:3, function(x) ggsavePP(filename = fls[x], plot = ChFg[[x]], width = 6, height = 3))
 
 TrtFg <- dlply(TrtMean, .(variable), PltTmpMean)
 fls <- paste("Output/Figs/WTC_IEM_Temp_", c("Nitrate", "Ammonium", "phosphate"), ".pdf",sep = "")
@@ -33,4 +33,4 @@ pl <- p + geom_line(size = 1) +
   scale_color_manual(values = c("blue", "red"), "Temp trt", labels = c("Ambient", "eTemp")) +
   facet_grid(variable~., scales= "free_y", labeller= ylab_label) +
   labs(x = "Time", y = expression((mu*g~cm^-2~day^-1)))
-ggsave(filename = "Output//Figs/WTC_IEM_Temp.pdf", plot = pl, width = 6, height = 6)
+ggsavePP(filename = "Output//Figs/WTC_IEM_Temp.pdf", plot = pl, width = 6, height = 6)
