@@ -13,6 +13,10 @@ source("R/functions.R")
 # iem <- droplevels(iem)
 # iem$date <- as.Date(ave(apply(cbind(iem$insertion, iem$sampling), 1, mean), iem$Time), origin = origin) # same date for same date
 # iem$id <- iem$Chamber:iem$Location
+# # change unit from ug to ng
+# iem$po <- iem$po * 1000 
+# iem$no <- iem$no * 1000 
+# iem$nh <- iem$nh * 1000 
 # save(iem, file = "Output//Data/WTC_IEM.RData")
 load("Output//Data/WTC_IEM.RData")
 
