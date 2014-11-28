@@ -3,17 +3,18 @@ rm(list=ls(all=TRUE))
 source("R/packages.R")
 source("R/functions.R")
 
-iem <- read.csv("Data/WTC_IEM.csv", colClasses = c("Chamber" = "numeric", "Location" = "factor", "insertion" = "character", 
-                                                   "sampling" = "character", "Time" = "factor"))
-
-iem$Chamber <- factor(ifelse(iem$Chamber < 10, paste("0", iem$Chamber, sep = ""), iem$Chamber)) #"01" is easier to organise than "1"
-iem$insertion <- as.Date(dmy(iem$insertion))
-iem$sampling <- as.Date(dmy(iem$sampling))
-iem <- iem[complete.cases(iem), ]
-iem <- droplevels(iem)
-iem$date <- as.Date(ave(apply(cbind(iem$insertion, iem$sampling), 1, mean), iem$Time), origin = origin) # same date for same date
-iem$id <- iem$Chamber:iem$Location
-save(iem, file = "Output//Data/WTC_IEM.RData")
+# iem <- read.csv("Data/WTC_IEM.csv", colClasses = c("Chamber" = "numeric", "Location" = "factor", "insertion" = "character", 
+#                                                    "sampling" = "character", "Time" = "factor"))
+# 
+# iem$Chamber <- factor(ifelse(iem$Chamber < 10, paste("0", iem$Chamber, sep = ""), iem$Chamber)) #"01" is easier to organise than "1"
+# iem$insertion <- as.Date(dmy(iem$insertion))
+# iem$sampling <- as.Date(dmy(iem$sampling))
+# iem <- iem[complete.cases(iem), ]
+# iem <- droplevels(iem)
+# iem$date <- as.Date(ave(apply(cbind(iem$insertion, iem$sampling), 1, mean), iem$Time), origin = origin) # same date for same date
+# iem$id <- iem$Chamber:iem$Location
+# save(iem, file = "Output//Data/WTC_IEM.RData")
+load("Output//Data/WTC_IEM.RData")
 
 #################
 # Summary table #
