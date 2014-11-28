@@ -16,6 +16,17 @@ TrtFg <- dlply(TrtMean, .(variable), PltTmpMean)
 fls <- paste("Output/Figs/WTC_IEM_Temp_", c("Nitrate", "Ammonium", "phosphate"),sep = "")
 l_ply(1:3, function(x) ggsavePP(filename = fls[x], plot = TrtFg[[x]], width = 6, height = 3))
 
+############################
+# Fig for BES presentaiton #
+############################
+poster_theme <- theme(panel.grid.major = element_blank(),
+                      panel.grid.minor = element_blank(),
+                      legend.position = "non")
+
+TrtFg <- dlply(TrtMean, .(variable), function(x) PltTmpMean(x) + poster_theme)
+fls <- paste("Output/Figs/BES_Presentation/WTC_IEM_Temp_", c("Nitrate", "Ammonium", "phosphate"),sep = "")
+l_ply(1:3, function(x) ggsavePP(filename = fls[x], plot = TrtFg[[x]], width = 5, height = 3))
+
 ## plot all nutrients ##
 # labels for facet_grid
 ylabs <- list(

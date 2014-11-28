@@ -272,10 +272,10 @@ PltTmpMean <- function(data){
   p <- ggplot(data, aes(x = date, y = Mean, col = temp))
   
   
-  ylabs <- c(expression(IEM*-adsorbed~nutrients~(ng~cm^"-2" ~ d^"-1")),
-             expression(IEM*-adsorbed~NO[3]^"-"~(ng~cm^"-2" ~ d^"-1")),
-             expression(IEM*-adsorbed~NH[4]^"+"~(ng~cm^"-2" ~ d^"-1")),
-             expression(IEM*-adsorbed~PO[4]^"3-"~(ng~cm^"-2" ~ d^"-1")))
+  ylabs <- c(expression(atop(IEM*-adsorbed~nutrients, (ng~cm^"-2" ~ d^"-1"))),
+             expression(atop(IEM*-adsorbed~NO[3]^"-", (ng~cm^"-2" ~ d^"-1"))),
+             expression(atop(IEM*-adsorbed~NH[4]^"+", (ng~cm^"-2" ~ d^"-1"))),
+             expression(atop(IEM*-adsorbed~PO[4]^"3-", (ng~cm^"-2" ~ d^"-1"))))
 
   # subsitute returens argument as it is without calculation (similar to expression())
   ylab <- ifelse(length(unique(data$variable)) > 1, ylabs[1],
@@ -290,7 +290,7 @@ PltTmpMean <- function(data){
     scale_color_manual(values = c("blue", "red"), "Temp trt", labels = c("Ambient", "eTemp")) +
     scale_x_date(breaks= date_breaks("2 month"), labels = date_format("%b-%y")) +
     theme(axis.text.x  = element_text(angle=45, vjust= 1, hjust = 1)) +
-    labs(x = NULL, y = ylab)
+    labs(x = "Month", y = ylab)
 }
 
 ####################################
