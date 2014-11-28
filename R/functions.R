@@ -286,9 +286,11 @@ PltTmpMean <- function(data){
   p + geom_line(size = 1, position = position_dodge(5)) + 
     geom_errorbar(aes(ymin = Mean - SE, ymax = Mean + SE, col = temp),
                   position = position_dodge(5),
-                  width = 5) + 
+                  width = 15) + 
     scale_color_manual(values = c("blue", "red"), "Temp trt", labels = c("Ambient", "eTemp")) +
-    scale_x_date(breaks= date_breaks("2 month"), labels = date_format("%b-%y")) +
+    scale_x_date(breaks= date_breaks("1 month"), 
+                 labels = date_format("%b-%y"),
+                 limits = as.Date(c("2013-2-1", "2014-2-15"))) +
     theme(axis.text.x  = element_text(angle=45, vjust= 1, hjust = 1)) +
     labs(x = "Month", y = ylab)
 }
