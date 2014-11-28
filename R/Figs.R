@@ -13,15 +13,15 @@ fls <- paste("Output/Figs/WTC_IEM_Chamber_", c("Nitrate", "Ammonium", "phosphate
 lapply(1:3, function(x) ggsavePP(filename = fls[x], plot = ChFg[[x]], width = 6, height = 3))
 
 TrtFg <- dlply(TrtMean, .(variable), PltTmpMean)
-fls <- paste("Output/Figs/WTC_IEM_Temp_", c("Nitrate", "Ammonium", "phosphate"), ".pdf",sep = "")
-lapply(1:3, function(x) ggsave(filename = fls[x], plot = TrtFg[[x]], width = 6, height = 3))
+fls <- paste("Output/Figs/WTC_IEM_Temp_", c("Nitrate", "Ammonium", "phosphate"),sep = "")
+l_ply(1:3, function(x) ggsavePP(filename = fls[x], plot = TrtFg[[x]], width = 6, height = 3))
 
 ## plot all nutrients ##
 # labels for facet_grid
 ylabs <- list(
-  'no' = expression(NO[3]^"-"-N),
-  'nh' = expression(NH[4]^"+"-N),
-  'po' = expression(PO[4]^"3-"-P))
+  'no' = expression(NO[3]^"-"),
+  'nh' = expression(NH[4]^"+"),
+  'po' = expression(PO[4]^"3-"))
 
 ylab_label <- function(variable, value){
   return(ylabs[value])

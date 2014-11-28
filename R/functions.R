@@ -270,13 +270,27 @@ PltChmMean <- function(data){
 #############################
 PltTmpMean <- function(data){
   p <- ggplot(data, aes(x = date, y = Mean, col = temp))
-  ylab <- ifelse(unique(data$variable) == "no", expression(NO[3]^"-"-N~(mu*g~cm^-2~day^-1)), 
-                 ifelse(unique(data$variable) == "nh", expression(NH[4]^"+"-N~(mu*g~cm^-2~day^-1)), 
-                        expression(PO[4]^"3-"-P~(mu*g~cm^-2~day^-1))))
-  p + geom_line(size = 1) + 
-    geom_errorbar(aes(ymin = Mean - SE, ymax = Mean + SE, col = temp), width = 5) + 
+  
+  
+  ylabs <- c(expression(IEM*-adsorbed~nutrients~(ng~cm^"-2" ~ d^"-1")),
+             expression(IEM*-adsorbed~NO[3]^"-"~(ng~cm^"-2" ~ d^"-1")),
+             expression(IEM*-adsorbed~NH[4]^"+"~(ng~cm^"-2" ~ d^"-1")),
+             expression(IEM*-adsorbed~PO[4]^"3-"~(ng~cm^"-2" ~ d^"-1")))
+
+  # subsitute returens argument as it is without calculation (similar to expression())
+  ylab <- ifelse(length(unique(data$variable)) > 1, ylabs[1],
+                 ifelse(unique(data$variable) == "no", ylabs[2], 
+                        ifelse(unique(data$variable) == "nh", ylabs[3],
+                               ylabs[4])))
+  
+  p + geom_line(size = 1, position = position_dodge(5)) + 
+    geom_errorbar(aes(ymin = Mean - SE, ymax = Mean + SE, col = temp),
+                  position = position_dodge(5),
+                  width = 5) + 
     scale_color_manual(values = c("blue", "red"), "Temp trt", labels = c("Ambient", "eTemp")) +
-    labs(x = "Time", y = ylab)
+    scale_x_date(breaks= date_breaks("2 month"), labels = date_format("%b-%y")) +
+    theme(axis.text.x  = element_text(angle=45, vjust= 1, hjust = 1)) +
+    labs(x = NULL, y = ylab)
 }
 
 ####################################
