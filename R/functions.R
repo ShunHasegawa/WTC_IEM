@@ -489,12 +489,12 @@ WBFig <- function(data, ylab, facetLab = ylab_label, figTheme = science_theme, S
     facet_grid(variable~., scales= "free_y", labeller= facetLab) +
     figTheme +
     geom_text(data = subset(statDF, predictor != ""), 
-              aes(x = as.Date("2013-3-1"), y = yval, label = predictor),
+              aes(x = as.Date("2013-4-1"), y = yval, label = predictor),
               size = 3, hjust = 1, parse = TRUE) +
     # unless remove [" "] with predictor != "", labels will be messed up due to
     # this empty level
     geom_text(data = statDF, 
-              aes(x = as.Date("2013-3-21"), y = yval, label = p), 
+              aes(x = as.Date("2013-4-25"), y = yval, label = p), 
               size = 3, parse = TRUE)
   return(p2)
 }
