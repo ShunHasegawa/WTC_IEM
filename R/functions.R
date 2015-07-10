@@ -191,7 +191,7 @@ atcr.cmpr <- function(model, rndmFac){
 # log OR sqrt OR power(1/3) OR inverse OR box-cox
 bxplts <- function(value, ofst = 0, data, ...){
   data$y <- data[[value]] + ofst #ofst is added to make y >0
-  a <- boxcox(y ~ temp * Time, data = data)
+  a <- boxcox(y ~ temp * Time, data = data, plotit = FALSE)
   par(mfrow = c(2, 3))
   boxplot(y ~ temp*Time, data, main = "row")
   boxplot(log(y) ~ temp*Time, main = "log", data)
@@ -218,7 +218,7 @@ bxcxplts <- function(value, data, sval, fval){
   BCmax <- vector()
   for (i in 1:10){
     data$y <- data$yval + ranges[i]
-    a <- boxcox(y ~ temp * Time, data = data)
+    a <- boxcox(y ~ temp * Time, data = data, plotit = FALSE)
     BCmax[i] <- a$x[a$y == max(a$y)]
   }
   
