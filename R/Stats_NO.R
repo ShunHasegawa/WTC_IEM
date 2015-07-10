@@ -1,54 +1,51 @@
 ## ----Stat_WTC_IEM_Nitrate
 
-bxplts(value= "no",  data= iem)
-bxcxplts(value= "no",  data= iem, sval = 0.01, fval =.1)
+bxplts(value= "no",  data= IEM_ChMean)
+bxcxplts(value= "no",  data= IEM_ChMean, sval = 0.01, fval =.1)
+xyplot(no ~ Time|temp, groups = Chamber, type = "o", 
+       panel = panel.superpose, data = IEM_ChMean)
 
 # sqrt looks better
-m1 <- lme(sqrt(no) ~ temp * Time, random = ~1|Chamber/Location, data = iem)
-m2 <- lme(sqrt(no) ~ temp * Time, random = ~1|id, data = iem)
-m3 <- lme(sqrt(no) ~ temp * Time, random = ~1|Chamber, data = iem)
-anova(m1, m2, m3)
-
-# m2 looks better
-
-# autocorrelation
-atcr.cmpr(m2, rndmFac= "id")$models
-# model3 looks the best
-Iml <- atcr.cmpr(m2, rndmFac= "id")[[3]]
-
-# The initial model is:
-Iml$call
-Anova(Iml)
-
-# model simplification
-MdlSmpl(Iml)
-  # unable to remove any factors
-
-# The final model is:
-Fml <- MdlSmpl(Iml)$model.reml
-Anova(Fml)
-
-# contrast
-cntrst<- contrast(Fml, 
-                  a = list(Time = levels(iem$Time), temp = "amb"),
-                  b = list(Time = levels(iem$Time), temp = "elev"))
-WTC_IEM_Nitrate_CntrstDf <- cntrstTbl(cntrst, iem)
-WTC_IEM_Nitrate_CntrstDf
+Iml_no <- lmer(sqrt(no) ~ temp*Time  + (1|Chamber), data = IEM_ChMean)
+Anova(Iml_no)
 
 # model diagnosis
-plot(Fml)
-qqnorm(Fml, ~ resid(.)|Chamber)
-qqnorm(residuals.lm(Fml))
-qqline(residuals.lm(Fml))
+plot(Iml_no)
+qqnorm(resid(Iml_no))
+qqline(resid(Iml_no))
+# one outlier, what if it's removed
+ol <- which(qqnorm(resid(Iml_no))$y == min(qqnorm(resid(Iml_no))$y))
+m2 <- update(Iml_no, subset = -ol)
+Anova(m2, test.statistic = "F")
+plot(m2)
+qqnorm(resid(m2))
+qqline(resid(m2))
+# slightly better but no huge difference, so stay with the first one.
+
+Fml_no <- Iml_no
+AnvF_no <- Anova(Fml_no, test.statistic = "F")
+
+# contrast
+lmemod <- lme(sqrt(no) ~ temp*Time, random = ~1|Chamber, data = IEM_ChMean)
+
+cntrst<- contrast(lmemod, 
+                  a = list(Time = levels(IEM_ChMean$Time), temp = "amb"),
+                  b = list(Time = levels(IEM_ChMean$Time), temp = "elev"))
+WTC_IEM_Nitrate_CntrstDf <- cntrstTbl(cntrst, IEM_ChMean)
+WTC_IEM_Nitrate_CntrstDf
 
 ## ----Stat_WTC_IEM_Nitrate_Smmry
 # The initial model is:
-Iml$call
-Anova(Iml)
+Iml_no@call
 
 # The final model is:
-Fml <- MdlSmpl(Iml)$model.reml
-Anova(Fml)
+Fml_no@call
+
+# Chi
+Anova(Fml_no)
+
+# F test
+AnvF_no
 
 # contrast
 WTC_IEM_Nitrate_CntrstDf

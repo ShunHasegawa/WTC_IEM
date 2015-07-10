@@ -18,7 +18,6 @@ names(IEM_ChMean)[4] <- "Date"
 # mean of soil vars during incubation period
 head(SoilCh)
 
-data = SoilCh
 SoilIncSampMean <- function(insertion, sampling, Chm, data = SoilCh){
   a <- subset(data, Date >= insertion & Date >= sampling & Chamber == Chm)
   vars <- names(a)[which(!names(a) %in% c("Date", "Chamber", "temp"))]

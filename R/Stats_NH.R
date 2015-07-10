@@ -1,48 +1,41 @@
-## ----Stat_WTC_IEM_Ammonium
-
-bxplts(value= "nh",  data= iem)
+## ----Stat_WTC_IEM_ChMean_Ammonium
+bxplts(value= "nh",  data= IEM_ChMean)
 
 # remove one obvious outlier
-nhDat <- subset(iem, nh < max(nh))
+nhDat <- subset(IEM_ChMean, nh < max(nh))
 
 bxplts(value= "nh",  data= nhDat)
 
-# log seemes slightly better
-m1 <- lme(log(nh) ~ temp * Time, random = ~1|Chamber/Location, data = nhDat)
-m2 <- lme(log(nh) ~ temp * Time, random = ~1|id, data = nhDat)
-m3 <- lme(log(nh) ~ temp * Time, random = ~1|Chamber, data = nhDat)
-anova(m1, m2, m3)
-# m2 (or m3) is slightly better than m1
+xyplot(nh ~ Time|temp, groups = Chamber, type = "o", 
+       panel = panel.superpose, data = nhDat)
 
-# auutocorrelation
-atcr.cmpr(m2, rndmFac= "id")$models
-# model2 looks better
-Iml <- atcr.cmpr(m2, rndmFac= "id")[[2]]
+xyplot(nh ~ Time|Chamber, groups = id, type = "o", 
+       panel = panel.superpose, data = subset(iem, nh < max(nh)))
 
-# The initial model is:
-Iml$call
-
-Anova(Iml)
-
-# model simplification
-MdlSmpl(Iml)
-
-# The final model is
-Fml <- MdlSmpl(Iml)$model.reml
-Anova(Fml)
-
+# raw data
+Iml_nh <- lmer(nh ~ temp*Time  + (1|Chamber), data = nhDat)
+Anova(Iml_nh)
 # model diagnosis
-plot(Fml)
-qqnorm(Fml, ~ resid(.)|Chamber)
-qqnorm(residuals.lm(Fml))
-qqline(residuals.lm(Fml))
+plot(Iml_nh)
+qqnorm(resid(Iml_nh))
+qqline(resid(Iml_nh))
 
-## ----Stat_WTC_IEM_Ammonium_Smmry
+Fml_nh <- Iml_nh
+AnvF_nh <- Anova(Fml_nh, test.statistic = "F")
+
+# contrast
+lmemod <- lme(nh ~ temp*Time, random = ~1|Chamber, data = nhDat)
+
+cntrst<- contrast(lmemod, 
+                  a = list(Time = levels(nhDat$Time), temp = "amb"),
+                  b = list(Time = levels(nhDat$Time), temp = "elev"))
+WTC_IEM_Ammonium_CntrstDf <- cntrstTbl(cntrst, nhDat)
+WTC_IEM_Ammonium_CntrstDf
+
+## ----Stat_WTC_IEM_ChMean_Ammonium_Smmry
 # The initial model is:
-Iml$call
-Anova(Iml)
+Iml_nh@call
 
 # The final model is:
-Fml <- MdlSmpl(Iml)$model.reml
-Anova(Fml)
-
+Fml_nh@call
+AnvF_nh

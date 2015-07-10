@@ -1,33 +1,38 @@
-## ----Stat_WTC_IEM_Phosphate
-bxplts(value= "po", ofst= .1, data= iem)
-bxcxplts(value= "po", data= iem, sval = 0.1, fval = .001)
+## ----Stat_WTC_IEM_ChMean_Phosphate
+bxplts(value= "po", data= IEM_ChMean)
+xyplot(log(po) ~ Time|temp, groups = Chamber, type = "o", 
+       panel = panel.superpose, data = IEM_ChMean)
+
+
 # use log
 
 # The initial model is
-Iml <- lmer(log(po + .1) ~ temp * Time + (1|Chamber) + (1|id), data = iem)
-Anova(Iml)
+Iml_po <- lmer(log(po) ~ temp * Time + (1|Chamber), data = IEM_ChMean)
+Anova(Iml_po)
 
 # The final model is
-Fml <- stepLmer(Iml)
-Anova(Fml)
-AnvF_P <- Anova(Fml, test.statistic = "F")
-AnvF_P
+Fml_po <- stepLmer(Iml_po)
+Anova(Fml_po)
+AnvF_po <- Anova(Fml_po, test.statistic = "F")
+AnvF_po
 
-summary(Fml)
-
-plot(allEffects(Fml))
+summary(Fml_po )
 
 # model diagnosis
-plot(Fml)
-qqnorm(resid(Fml))
-qqline(resid(Fml))
+plot(Fml_po)
+qqnorm(resid(Fml_po))
+qqline(resid(Fml_po))
 
-## ----Stat_WTC_IEM_Phosphate_Smmry
+## ----Stat_WTC_IEM_ChMean_Phosphate_Smmry
 # The initial model is:
-Iml@call
-Anova(Iml)
+Iml_po@call
+Anova(Iml_po)
 
 # The final model is:
-Fml@call
-Anova(Fml)
-AnvF_P
+Fml_po@call
+
+# Chi test
+Anova(Fml_po)
+
+# F test
+AnvF_po
