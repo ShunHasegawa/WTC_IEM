@@ -60,8 +60,6 @@ p <- WBFig(data = TrtMean, ylab = expression(IEM*-adsorbed~nutrients~(ng~cm^"-2"
 p
 ggsavePP(filename = "output//figs/Manuscript/WTC_IEM", plot = p, width = 6.65, height = 6.65)
 
-
-
 ############################
 # Fig for BES presentaiton #
 ############################
