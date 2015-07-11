@@ -56,6 +56,11 @@ load("Output/Data/AllObj.RData")
 \clearpage
 \Sexpr{knit_child('IEM_Phosphate.Rnw')}
 
+%%%%%%%%%%%%
+% NP ratio %
+%%%%%%%%%%%%
+\clearpage
+\Sexpr{knit_child('IEM_NPRatio.Rnw')}
 
 %%%%%%%%%%%%%%%%
 % List of figs %

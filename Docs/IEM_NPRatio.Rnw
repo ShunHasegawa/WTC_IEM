@@ -1,0 +1,30 @@
+\Sexpr{set_parent('WTC_IEM_report.Rnw')}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% source files & libraries & setup options                                  %%
+%% need to be loaded here if one wants to compile this child document to PDF %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%' <<setup, include=FALSE>>=
+%' opts_chunk$set(concordance = TRUE, warning = FALSE, tidy = TRUE, tidy.opts = list(width.cutoff = 60))
+%' opts_knit$set(root.dir=normalizePath('../'))
+%' @
+%' 
+%' <<readFiles, include=FALSE>>=
+%' source("R/packages.R")
+%' load("Output/Data/AllObj.RData")
+%' @
+
+\section{N:P ratio}
+
+<<<ReadScript_WTC_IEM_NPRatio, echo=FALSE, include=FALSE>>=
+read_chunk("R/Stats_NPRatio.R")
+@
+
+<<Stat_WTC_IEM_NPRatio_Smmry, echo=TRUE, results='markup'>>=
+@
+
+\begin{figure}[!h]\label{figure:temp.iem.NPRatio}
+\includegraphics{../Output/Figs/Manuscript/WTC_NPRatioMoist.pdf}
+\caption{N:P ratios against soil moisutre}
+\end{figure}
