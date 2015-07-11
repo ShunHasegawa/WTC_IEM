@@ -31,7 +31,7 @@ names(IEM_ChMean)[4] <- "Date"
 head(SoilCh)
 
 SoilIncSampMean <- function(insertion, sampling, Chm, data = SoilCh){
-  a <- subset(data, Date >= insertion & Date >= sampling & Chamber == Chm)
+  a <- subset(data, Date >= insertion & Date <= sampling & Chamber == Chm)
   vars <- names(a)[which(!names(a) %in% c("Date", "Chamber", "temp"))]
   b <- ddply(a, .(Chamber), function(x) colMeans(x[, vars], na.rm = TRUE))
   return(cbind(insertion, sampling, b))
@@ -41,6 +41,17 @@ SoilIncSampMean <- function(insertion, sampling, Chm, data = SoilCh){
 IEM_DF <- ddply(IEM_ChMean, .(Time, Date, insertion, sampling, Chamber, temp, no, nh, po, NP, gmNP),
                 function(x) SoilIncSampMean(insertion= x$insertion, sampling= x$sampling, Chm = x$Chamber))
 IEM_DF$moist <- IEM_DF$SoilVW_5_25_Mean
+
+p <- ggplot(SoilCh, aes(x = Date, y = SoilVW_5_25_Mean))
+p2 <- p + 
+  geom_line() +
+  geom_point(data = IEM_DF, aes(x = Date, y = SoilVW_5_25_Mean), 
+             col = "red", size = 2)+
+  facet_wrap( ~ Chamber)+
+  geom_vline(xintercept = as.numeric(unique(IEM_DF$insertion)), linetype = "dashed") +
+  geom_vline(xintercept = as.numeric(unique(IEM_DF$sampling)), linetype = "dashed")
+p2
+# good
 
 ###########
 # Nitrate #
@@ -56,6 +67,11 @@ source("R/Stats_NH.R")
 # Phosphate #
 #############
 source("R/Stats_P.R")
+
+############
+# NP Ratio #
+############
+source("R/Stats_NPRatio.R")
 
 ########################
 ## Result of contrast ##

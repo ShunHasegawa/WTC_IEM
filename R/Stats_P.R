@@ -34,8 +34,11 @@ qqline(resid(Fml_po))
 xyplot(log(po) ~ moist|temp, groups = Chamber, type = c("r", "p"), data = IEM_DF)
 # each time
 xyplot(log(po) ~ moist|temp, groups = Time, type = c("r", "p"), data = IEM_DF)
-
+scatterplotMatrix(~ log(po) + moist + Temp5_Mean, data = IEM_DF, diag = "boxplot", 
+                  groups = IEM_DF$temp, by.group = TRUE)
 Iml_ancv_po <- lmer(log(po) ~ temp * moist + (1|Time) + (1|Chamber), data = IEM_DF)
+mmm <- stepLmer(Iml_ancv_po)
+Anova(mmm)
 m2 <- update(Iml_ancv_po, ~. - (1|Time))
 m3 <- update(Iml_ancv_po, ~. - (1|Chamber))
 # m3 is best but it's repeated measure, so keep chamber anyway..

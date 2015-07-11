@@ -43,8 +43,9 @@ WTC_IEM_Nitrate_CntrstDf
 #######################
 xyplot(sqrt(no) ~ moist|temp, groups = Chamber, type = c("r", "p"), data = IEM_DF)
 xyplot(sqrt(no) ~ moist|temp, groups = Time, type = c("r", "p"), data = IEM_DF)
-boxplot(moist ~ temp, data = IEM_DF)
-
+scatterplotMatrix(~ sqrt(no) + moist + Temp5_Mean, data = IEM_DF, diag = "boxplot", 
+                  groups = IEM_DF$temp, by.group = TRUE)
+plot(moist ~ Temp10_Mean, data= IEM_DF, pch = 19, col = temp)
 
 Iml_ancv_no <- lmer(sqrt(no) ~ temp * moist + (1|Time) + (1|Chamber), data = IEM_DF)
 m2 <- update(Iml_ancv_no, ~. - (1|Time))
@@ -52,7 +53,7 @@ m3 <- update(Iml_ancv_no, ~. - (1|Chamber))
 anova(Iml_ancv_no, m2, m3)
 
 Anova(Iml_ancv_no)
-Fml_ancv_no <- stepLmer(Iml_ancv_no)
+Fml_ancv_no <- Iml_ancv_no
 AnvF_ancv_no <- Anova(Fml_ancv_no, test.statistic = "F")
 AnvF_ancv_no
 

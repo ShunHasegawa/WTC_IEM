@@ -49,18 +49,23 @@ xyplot(nh ~ moist|temp, groups = Chamber, type = c("r", "p"),data = IEM_DF)
 # each time
 xyplot(nh ~ moist|temp, groups = Time, type = c("r", "p"), data = IEM_DF)
 
+scatterplotMatrix(~ nh + moist + Temp5_Mean, data = IEM_DF, diag = "boxplot", 
+                  groups = IEM_DF$temp, by.group = TRUE)
+
 Iml_ancv_nh <- lmer(nh ~ temp * moist + (1|Time) + (1|Chamber), data = IEM_DF)
 Anova(Iml_ancv_nh)
 m2 <- update(Iml_ancv_nh, ~. - (1|Time))
 m3 <- update(Iml_ancv_nh, ~. - (1|Chamber))
+anova(Iml_ancv_nh, m2, m3)
 Anova(Iml_ancv_nh, test.statistic = "F")
-# none is significant
 
-Fml_ancv_nh <- stepLmer(Iml_ancv_nh)
-# nothing is left
+Fml_ancv_nh <- Iml_ancv_nh
 
-AnvF_ancv_nh <- Anova(Iml_ancv_nh, test.statistic = "F")
+AnvF_ancv_nh <- Anova(Fml_ancv_nh, test.statistic = "F")
+AnvF_ancv_nh
 
+# visualise
+visreg(Fml_ancv_nh, xvar = "moist", by = "temp", overlay = TRUE)
 
 ## ----Stat_WTC_IEM_Ammonium_Smmry
 # The initial model is:
@@ -76,3 +81,5 @@ Anova(Iml_ancv_nh)
 AnvF_ancv_nh
 
 Fml_ancv_nh@call
+
+visreg(Fml_ancv_nh, xvar = "moist", by = "temp", overlay = TRUE)
