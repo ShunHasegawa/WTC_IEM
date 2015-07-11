@@ -48,7 +48,7 @@ read_chunk("R/Stats_NH.R")
 %% Summary %%
 %%%%%%%%%%%%%
 
-<<Stat_WTC_IEM_Ammonium_Smmry, echo=TRUE, results='markup'>>=
+<<Stat_WTC_IEM_Ammonium_Smmry, echo=TRUE, results='markup', fig.show='asis', fig.width = 4, fig.height = 3>>=
 @
 
 % %%%%%%%%%%%%
