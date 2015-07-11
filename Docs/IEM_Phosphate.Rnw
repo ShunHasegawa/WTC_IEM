@@ -5,25 +5,30 @@
 %% need to be loaded here if one wants to compile this child document to PDF %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{Phosphate}
+%' <<setup, include=FALSE>>=
+%' opts_chunk$set(concordance = TRUE, warning = FALSE, tidy = TRUE, tidy.opts = list(width.cutoff = 60))
+%' opts_knit$set(root.dir=normalizePath('../'))
+%' @
+%' 
+%' <<readFiles, include=FALSE>>=
+%' source("R/packages.R")
+%' load("Output/Data/AllObj.RData")
+%' @
+
+\section{Phosphate}
 
 %%% Temp %%%
-\subsubsection{Temp trt}
+\subsection{Temperature treatment}
 
 \begin{figure}[!h]\label{figure:temp.iem.po}
-\begin{center}
-
-<<Fig_WTC_IEM_Phosphate_Temp, echo=FALSE, fig.height=3, fig.width=6>>=
-TrtFg[[3]]
-@
+\includegraphics{../Output/Figs/WTC_IEM_Temp_Phosphate.pdf}
 \caption{IEM-adsorbed Phosphate at temperature treatments}
-\end{center}
 \end{figure}
 
 <<Tbl_WTC_IEM_Phosphate_Temp, echo = FALSE, results='asis'>>=
 print(xtable(TrtSmmryTbl[[3]],
              caption = "Temp mean for IEM-adsorbed Phosphate",
-             label = "table:Temp.IEM.PO",align = rep("l", 8),
+             label = "table:Temp.IEM.PO",align = rep("l", 9),
              digits = 4),
       caption.placement = "top",
       include.rownames= FALSE,
@@ -34,11 +39,9 @@ print(xtable(TrtSmmryTbl[[3]],
 %%% Stats %%%
 %%%%%%%%%%%%%
 \clearpage
-\paragraph{Stats}
-\noindent
+\subsection{Stats}
 
 <<<ReadScript_WTC_IEM_Phosphate, echo=FALSE, include=FALSE>>=
-source("R/Stats_P.R")
 read_chunk("R/Stats_P.R")
 @
 
@@ -57,17 +60,11 @@ read_chunk("R/Stats_P.R")
 
 %%% Chamber %%%
 \clearpage
-\subsubsection{Chamber}
+\subsection{Chamber}
 
 \begin{figure}[!h]\label{figure:chamber.iem.PO}
-\begin{center}
-
-<<Fig_WTC_IEM_Phosphate_Chamber, echo=FALSE, fig.height=3.5, fig.width=6>>=
-# ring_Phosphate
-ChFg[[3]]
-@
+\includegraphics{../Output/Figs/WTC_IEM_Chamber_Phosphate.pdf}
 \caption{IEM-adsorbed Phosphate (Chamber means)}
-\end{center}
 \end{figure}
 
 <<Tbl_WTC_IEM_Phosphate_Chamber, echo = FALSE, results='asis'>>=

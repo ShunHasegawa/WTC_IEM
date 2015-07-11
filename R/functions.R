@@ -146,6 +146,8 @@ CreateTable <- function(dataset, fac){
   mer <- Reduce(function(...) merge(..., by = "date"), list(means, ses, samples)) #merge datasets
   mer <- mer[,c(1, order(names(mer)[-grep("date|N", names(mer))])+1, grep("N", names(mer)))] #re-order columns
   mer$date <- as.character(mer$date) # date is turned into character for knitr output 
+  # eTemp %response
+  if(fac == "temp") mer$tempR <- with(mer, elev/amb - 1)
   return(mer)
 }
 
@@ -193,7 +195,7 @@ bxplts <- function(value, ofst = 0, data, ...){
   data$y <- data[[value]] + ofst #ofst is added to make y >0
   a <- boxcox(y ~ temp * Time, data = data, plotit = FALSE)
   par(mfrow = c(2, 3))
-  boxplot(y ~ temp*Time, data, main = "row")
+  boxplot(y ~ temp*Time, data, main = "raw")
   boxplot(log(y) ~ temp*Time, main = "log", data)
   boxplot(sqrt(y) ~ temp*Time, main = "sqrt", data)
   boxplot(y^(1/3) ~ temp*Time, main = "power(1/3)", data)

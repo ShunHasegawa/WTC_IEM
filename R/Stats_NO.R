@@ -80,10 +80,11 @@ AnvF_no
 # contrast
 WTC_IEM_Nitrate_CntrstDf
 
-## ----Stat_WTC_IEM_Nitrate_Smmry_ANCOVA
+# ANCOVA
 Iml_ancv_no@call
 Anova(Iml_ancv_no)
 
 Fml_ancv_no@call
 Anova(Fml_ancv_no)
 AnvF_ancv_no
+visreg(Fml_ancv_no, xvar = "moist", by = "temp", overlay = TRUE)

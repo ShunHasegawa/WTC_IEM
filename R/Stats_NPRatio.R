@@ -82,3 +82,11 @@ p2 <- p +
   labs(x = "log(Moisture (%))", y = "N:P ratio")
 p2
 ggsavePP(plot = p2, filename = "Output/Figs/Manuscript/WTC_NPRatioMoist", width = 4, height = 3)  
+
+## --------Stat_WTC_IEM_ChMean_NPRatio_Smmry
+Iml_NP@call
+Anova(Iml_NP)
+
+Fml_NP@call
+Anova(Fml_NP)
+AnvF_NP

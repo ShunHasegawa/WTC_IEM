@@ -62,7 +62,7 @@ Fml_ancv_nh <- stepLmer(Iml_ancv_nh)
 AnvF_ancv_nh <- Anova(Iml_ancv_nh, test.statistic = "F")
 
 
-## ----Stat_WTC_IEM_ChMean_Ammonium_Smmry
+## ----Stat_WTC_IEM_Ammonium_Smmry
 # The initial model is:
 Iml_nh@call
 
@@ -70,7 +70,7 @@ Iml_nh@call
 Fml_nh@call
 AnvF_nh
 
-## ----Stat_WTC_IEM_ChMean_Ammonium_Smmry_ANCOVA
+# Ancova
 Iml_ancv_nh@call
 Anova(Iml_ancv_nh)
 AnvF_ancv_nh

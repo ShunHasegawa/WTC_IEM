@@ -5,52 +5,30 @@
 %% need to be loaded here if one wants to compile this child document to PDF %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% <<setup, include=FALSE>>=
-% opts_chunk$set(concordance = TRUE, warning = FALSE, tidy = TRUE, tidy.opts = list(width.cutoff = 60))
-% opts_knit$set(root.dir=normalizePath('../'))
-% @
-% 
-% <<readFiles, include=FALSE>>=
-% library(car)
-% library(gmodels)
-% library(lme4)
-% library(lubridate)
-% library(MASS)
-% library(nlme)
-% library(packrat)
-% library(plyr)
-% library(reshape)
-% library(xlsx)
-% library(contrast)
-% library(effects)
-% library(ggplot2)
-% library(xtable)
-% source("R/functions/functions.R")
-% load("Output//Data//WTC_IEM.RData")
-% source("R/SummaryExlTable.R")
-% source("R/Figs.R")
-% @
+%' <<setup, include=FALSE>>=
+%' opts_chunk$set(concordance = TRUE, warning = FALSE, tidy = TRUE, tidy.opts = list(width.cutoff = 60))
+%' opts_knit$set(root.dir=normalizePath('../'))
+%' @
+%' 
+%' <<readFiles, include=FALSE>>=
+%' source("R/packages.R")
+%' load("Output/Data/AllObj.RData")
+%' @
 
-\subsection{Nitrate}
-
+\section{Nitrate}
 
 %%% Temp %%%
-\subsubsection{Temp trt}
+\subsection{Temperature treatment}
 
 \begin{figure}[!h]\label{figure:temp.iem.no}
-\begin{center}
-
-<<Fig_WTC_IEM_Nitrate_Temp, echo=FALSE, fig.height=3, fig.width=6>>=
-TrtFg[[1]]
-@
-\caption{IEM-adsorbed Nitrate at temperature treatments}
-\end{center}
+\includegraphics{../Output/Figs/WTC_IEM_Temp_Nitrate.pdf}
+\caption{IEM-adsorbed nitrate at temperature treatments}
 \end{figure}
 
 <<Tbl_WTC_IEM_Nitrate_Temp, echo = FALSE, results='asis'>>=
 print(xtable(TrtSmmryTbl[[1]],
              caption = "Temp mean for IEM-adsorbed Nitrate",
-             label = "table:Temp.IEM.no",align = rep("l", 8)),
+             label = "table:Temp.IEM.no",align = rep("l", 9)),
       caption.placement = "top",
       include.rownames= FALSE,
       table.placement = "H")
@@ -60,11 +38,9 @@ print(xtable(TrtSmmryTbl[[1]],
 %%% Stats %%%
 %%%%%%%%%%%%%
 \clearpage
-\paragraph{Stats}
-\noindent
+\subsection{Stats}
 
 <<<ReadScript_WTC_IEM_Nitrate, echo=FALSE, include=FALSE>>=
-source("R/Stats_NO.R")
 read_chunk("R/Stats_NO.R")
 @
 
@@ -72,7 +48,7 @@ read_chunk("R/Stats_NO.R")
 %% Summary %%
 %%%%%%%%%%%%%
 
-<<Stat_WTC_IEM_Nitrate_Smmry, echo=TRUE, results='markup'>>=
+<<Stat_WTC_IEM_Nitrate_Smmry, echo=TRUE, results='markup', fig.show='asis', fig.width = 4, fig.height = 3>>=
 @
 
 % %%%%%%%%%%%%
@@ -83,17 +59,11 @@ read_chunk("R/Stats_NO.R")
 
 %%% Chamber %%%
 \clearpage
-\subsubsection{Chamber}
+\subsection{Chamber}
 
 \begin{figure}[!h]\label{figure:chamber.iem.no}
-\begin{center}
-
-<<Fig_WTC_IEM_Nitrate_Chamber, echo=FALSE, fig.height=3.5, fig.width=6>>=
-# ring_Phosphate
-ChFg[[1]]
-@
+\includegraphics{../Output/Figs/WTC_IEM_Chamber_Nitrate.pdf}
 \caption{IEM-adsorbed Nitrate (Chamber means)}
-\end{center}
 \end{figure}
 
 <<Tbl_WTC_IEM_Nitrate_Chamber, echo = FALSE, results='asis'>>=
@@ -103,15 +73,15 @@ print(xtable(ChSmmryTbl[[1]][,1:13],
       caption.placement = "top",
       include.rownames= FALSE,
       table.placement = "H",
-      size = "small")
+      size = "tiny")
 print(xtable(ChSmmryTbl[[1]][,c(1, 14:25)],
              align = rep("l", 14)),
       include.rownames= FALSE,
       table.placement = "H",
-      size = "small")
+      size = "tiny")
 print(xtable(ChSmmryTbl[[1]][,c(1, 26:37)],
              align = rep("l", 14)),
       include.rownames= FALSE,
       table.placement = "H",
-      size = "small")
+      size = "tiny")
 @

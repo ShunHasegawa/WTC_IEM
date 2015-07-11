@@ -4,25 +4,31 @@
 %% source files & libraries & setup options                                  %%
 %% need to be loaded here if one wants to compile this child document to PDF %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Ammonium}
+
+%' <<setup, include=FALSE>>=
+%' opts_chunk$set(concordance = TRUE, warning = FALSE, tidy = TRUE, tidy.opts = list(width.cutoff = 60))
+%' opts_knit$set(root.dir=normalizePath('../'))
+%' @
+%' 
+%' <<readFiles, include=FALSE>>=
+%' source("R/packages.R")
+%' load("Output/Data/AllObj.RData")
+%' @
+
+\section{Ammonium}
 
 %%% Temp %%%
-\subsubsection{Temp trt}
+\subsection{Temperature treatment}
 
 \begin{figure}[!h]\label{figure:temp.iem.nh}
-\begin{center}
-
-<<Fig_WTC_IEM_Ammonium_Temp, echo=FALSE, fig.height=3, fig.width=6>>=
-TrtFg[[2]]
-@
+\includegraphics{../Output/Figs/WTC_IEM_Temp_Ammonium.pdf}
 \caption{IEM-adsorbed Ammonium at temperature treatments}
-\end{center}
 \end{figure}
 
 <<Tbl_WTC_IEM_Ammonium_Temp, echo = FALSE, results='asis'>>=
 print(xtable(TrtSmmryTbl[[2]],
              caption = "Temp mean for IEM-adsorbed Ammonium",
-             label = "table:Temp.IEM.NH",align = rep("l", 8)),
+             label = "table:Temp.IEM.NH",align = rep("l", 9)),
       caption.placement = "top",
       include.rownames= FALSE,
       table.placement = "H")
@@ -32,11 +38,9 @@ print(xtable(TrtSmmryTbl[[2]],
 %%% Stats %%%
 %%%%%%%%%%%%%
 \clearpage
-\paragraph{Stats}
-\noindent
+\subsection{Stats}
 
 <<<ReadScript_WTC_IEM_Ammonium, echo=FALSE, include=FALSE>>=
-source("R/Stats_NH.R")
 read_chunk("R/Stats_NH.R")
 @
 
@@ -55,17 +59,11 @@ read_chunk("R/Stats_NH.R")
 
 %%% Chamber %%%
 \clearpage
-\subsubsection{Chamber}
+\subsection{Chamber}
 
 \begin{figure}[!h]\label{figure:chamber.iem.nh}
-\begin{center}
-
-<<Fig_WTC_IEM_Ammonium_Chamber, echo=FALSE, fig.height=3.5, fig.width=6>>=
-# ring_Phosphate
-ChFg[[2]]
-@
+\includegraphics{../Output/Figs/WTC_IEM_Chamber_Ammonium.pdf}
 \caption{IEM-adsorbed Ammonium (Chamber means)}
-\end{center}
 \end{figure}
 
 <<Tbl_WTC_IEM_Ammonium_Chamber, echo = FALSE, results='asis'>>=
@@ -75,15 +73,15 @@ print(xtable(ChSmmryTbl[[2]][,1:13],
       caption.placement = "top",
       include.rownames= FALSE,
       table.placement = "H",
-      size = "small")
+      size = "tiny")
 print(xtable(ChSmmryTbl[[2]][,c(1, 14:25)],
              align = rep("l", 14)),
       include.rownames= FALSE,
       table.placement = "H",
-      size = "small")
+      size = "tiny")
 print(xtable(ChSmmryTbl[[2]][,c(1, 26:37)],
              align = rep("l", 14)),
       include.rownames= FALSE,
       table.placement = "H",
-      size = "small")
+      size = "tiny")
 @

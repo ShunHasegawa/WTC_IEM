@@ -16,11 +16,11 @@ TrtSmmryTbl <- dlply(ChMean, .(variable), function(x) CreateTable(x, fac = "temp
 # create xcel workbook
 wb <- createWorkbook()
 
-# worksheet for rowdata and rowdata without outlier
-sheet <- createSheet(wb,sheetName="row_data")
+# worksheet for rawdata and rawdata without outlier
+sheet <- createSheet(wb,sheetName="raw_data")
 addDataFrame(iem, sheet, showNA=TRUE, row.names=FALSE, characterNA="NA")
 
-sheet <- createSheet(wb,sheetName="row_data_withoutOutlier")
+sheet <- createSheet(wb,sheetName="raw_data_withoutOutlier")
 addDataFrame(iemExOl, sheet, showNA=TRUE, row.names=FALSE, characterNA="NA")
 
 # worksheets for chamber summary

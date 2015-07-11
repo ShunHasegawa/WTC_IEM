@@ -30,6 +30,9 @@ source("R//SummaryExlTable.R")
 #########
 source("R//Stats.R")
 
+# save all ovjects
+save.image(file = "Output/Data/AllObj.RData")
+
 ########
 # Figs #
 ########

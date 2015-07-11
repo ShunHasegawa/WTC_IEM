@@ -48,7 +48,7 @@ plot(Fml_ancv_po)
 qqnorm(resid(Fml_ancv_po))
 qqline(resid(Fml_ancv_po))
 
-## ----Stat_WTC_IEM_ChMean_Phosphate_Smmry
+## ----Stat_WTC_IEM_Phosphate_Smmry
 # The initial model is:
 Iml_po@call
 Anova(Iml_po)
@@ -58,14 +58,15 @@ Fml_po@call
 
 # Chi test
 Anova(Fml_po)
-
 # F test
 AnvF_po
 
-## ----Stat_WTC_IEM_ChMean_Phosphate_Smmry_ANCOVA
+# ANCOVA
 Iml_ancv_po@call
 Anova(Iml_ancv_po)
 
 Fml_ancv_po@call
+# Chi test
 Anova(Fml_ancv_po)
+# F test
 AnvF_ancv_po
