@@ -302,11 +302,9 @@ PltTmpMean <- function(data){
 # Return star based on P value #
 ################################
 FormatPval <- function(Pval) {
-  stars <- ifelse(Pval > .1, "",
-                  ifelse(Pval > .05, "scriptstyle('\u2020')",
-                         ifelse(Pval > .01, "*",
-                                ifelse(Pval > .001, "**",
-                                       c("***")))))
+  stars <- ifelse(Pval > .05, "",
+                  ifelse(Pval > .01, "'*'",
+                         ifelse(Pval > .001, "'**'", "'***'"))))
   
   p <- as.character(ifelse(Pval > .1, round(Pval, 3),
                            ifelse(Pval < .001, "bold('<0.001')", 
