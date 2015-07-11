@@ -304,7 +304,7 @@ PltTmpMean <- function(data){
 FormatPval <- function(Pval) {
   stars <- ifelse(Pval > .05, "",
                   ifelse(Pval > .01, "'*'",
-                         ifelse(Pval > .001, "'**'", "'***'"))))
+                         ifelse(Pval > .001, "'**'", "'***'")))
   
   p <- as.character(ifelse(Pval > .1, round(Pval, 3),
                            ifelse(Pval < .001, "bold('<0.001')", 
@@ -438,7 +438,7 @@ WBFig <- function(data, ylab, facetLab = ylab_label, figTheme = science_theme, S
   
   # df for sub-labels
   subLabDF <- with(data, 
-                   data.frame(xv = as.Date("2013-2-1"),
+                   data.frame(xv = as.Date("2013-2-2"),
                               ddply(data, .(variable), summarise, yv = max(Mean + SE)),
                               labels = paste("(", letters[1:length(levels(variable))], ")", 
                                              sep = ""),
@@ -482,19 +482,19 @@ WBFig <- function(data, ylab, facetLab = ylab_label, figTheme = science_theme, S
                       labels = c("Ambient", "eTemp")) +
     scale_linetype_manual(values = c("solid", "dashed"), 
                           labels = c("Ambient", "eTemp")) +
-    geom_text(aes(x = xv, y = yv * .95, label = labels),
+    geom_text(aes(x = xv, y = yv, label = labels),
               fontface = "bold",
               hjust = 1,
               data = subLabDF) +
     facet_grid(variable~., scales= "free_y", labeller= facetLab) +
     figTheme +
     geom_text(data = subset(statDF, predictor != ""), 
-              aes(x = as.Date("2013-4-1"), y = yval, label = predictor),
+              aes(x = as.Date("2013-3-22"), y = yval, label = predictor),
               size = 3, hjust = 1, parse = TRUE) +
     # unless remove [" "] with predictor != "", labels will be messed up due to
     # this empty level
     geom_text(data = statDF, 
-              aes(x = as.Date("2013-4-25"), y = yval, label = p), 
+              aes(x = as.Date("2013-4-11"), y = yval, label = p), 
               size = 3, parse = TRUE)
   return(p2)
 }
