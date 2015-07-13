@@ -303,10 +303,11 @@ PltTmpMean <- function(data){
 ################################
 FormatPval <- function(Pval) {
   stars <- ifelse(Pval > .05, "",
-                  ifelse(Pval > .01, "'*'",
-                         ifelse(Pval > .001, "'**'", "'***'")))
+                  ifelse(Pval > .01, "*",
+                         ifelse(Pval > .001, "**", 
+                                "***")))
   
-  p <- as.character(ifelse(Pval > .1, round(Pval, 3),
+  p <- as.character(ifelse(Pval > .05, round(Pval, 3),
                            ifelse(Pval < .001, "bold('<0.001')", 
                                   # shown with bold font. Note that inside of
                                   # bold needs to be in ''
@@ -383,7 +384,7 @@ StatTable <- function(x, variable) { # x is anova result
   
   # relabel for plotting
   result$predictor <- factor(result$predictor, 
-                             labels = c("", "Temp", "Time", "Temp*~x~Time"), 
+                             labels = c("", "Temp", "Time", "Temp~x~Time"), 
                              levels = c("", "temp", "Time", "temp:Time"))
   result$variable <- variable
   result <- result[order(result$predictor), ]
@@ -496,6 +497,7 @@ WBFig <- function(data, ylab, facetLab = ylab_label, figTheme = science_theme, S
     geom_text(data = statDF, 
               aes(x = as.Date("2013-4-11"), y = yval, label = p), 
               size = 3, parse = TRUE)
+  p2
   return(p2)
 }
 
