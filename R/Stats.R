@@ -83,7 +83,7 @@ save(ContrastDF, file = "output//data/WTC_IEM_ContrastDF.RData")
 ## Temp x Time ##
 #################
 
-# create stat summary table for LMM with CO2 and time
+# create stat summary table for LMM with Temp and time
 TempTimeStatList <- list(no = AnvF_no, nh = AnvF_nh, po = AnvF_po) 
 
 Stat_TempTime <- ldply(names(TempTimeStatList), 
