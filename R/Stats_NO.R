@@ -47,11 +47,19 @@ scatterplotMatrix(~ sqrt(no) + moist + Temp5_Mean, data = IEM_DF, diag = "boxplo
                   groups = IEM_DF$temp, by.group = TRUE)
 plot(moist ~ Temp10_Mean, data= IEM_DF, pch = 19, col = temp)
 
+m1 <- lmer(sqrt(no) ~ temp * moist + (1|Time) + (1|Chamber), data = IEM_DF)
+Anova(m1)
+# Interaction is indicated, but moisture range is quite different. what if I use
+# the samge range of moisture for both treatment
+ddply(IEM_DF, .(temp), summarise, range(moist))
+m2 <- update(m1, subset = moist < 0.14)
+Anova(m2)
+# interaction is indicated anyway. so include interaction
+
 Iml_ancv_no <- lmer(sqrt(no) ~ temp * moist + (1|Time) + (1|Chamber), data = IEM_DF)
 m2 <- update(Iml_ancv_no, ~. - (1|Time))
 m3 <- update(Iml_ancv_no, ~. - (1|Chamber))
 anova(Iml_ancv_no, m2, m3)
-
 Anova(Iml_ancv_no)
 Fml_ancv_no <- Iml_ancv_no
 AnvF_ancv_no <- Anova(Fml_ancv_no, test.statistic = "F")

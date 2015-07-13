@@ -42,8 +42,18 @@ xyplot(NP ~ moist|Time, type = c("r", "p"), data = IEM_DF)
 scatterplotMatrix(~NP + moist + Temp5_Mean|temp, data = IEM_DF, diag = "boxplot")
 scatterplotMatrix(~log(NP) + log(moist) + Temp5_Mean|temp, data = IEM_DF, diag = "boxplot")
 
+m1 <- lmer(log(NP) ~ temp * log(moist) + (1|Time) + (1|Chamber), data = IEM_DF)
+Anova(m1)
+visreg(m1, xvar = "moist", by = "temp", overlay = TRUE)
+# Interaction is indicated, but moisture range is quite different. what if I use
+# the samge range of moisture for both treatment
+ddply(IEM_DF, .(temp), summarise, range(moist))
+m2 <- update(m1, subset = moist < 0.14)
+Anova(m2)
+visreg(m2, xvar = "moist", by = "temp", overlay = TRUE)
+# interaction is marginally indicated, so include
+
 Iml_ancv_NP <- lmer(log(NP) ~ temp * log(moist) + (1|Time) + (1|Chamber), data = IEM_DF)
-Iml_ancv_NP <- lmer(log(NP) ~ temp * (log(moist) + Temp5_Mean) + (1|Time) + (1|Chamber), data = IEM_DF)
 m2 <- update(Iml_ancv_NP, ~. - (1|Time))
 m3 <- update(Iml_ancv_NP, ~. - (1|Chamber))
 anova(Iml_ancv_NP, m2, m3)

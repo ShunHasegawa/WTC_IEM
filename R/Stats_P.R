@@ -3,7 +3,6 @@ bxplts(value= "po", data= IEM_ChMean)
 xyplot(log(po) ~ Time|temp, groups = Chamber, type = "o", 
        panel = panel.superpose, data = IEM_ChMean)
 
-
 # use log
 
 # The initial model is
@@ -36,6 +35,7 @@ xyplot(log(po) ~ moist|temp, groups = Chamber, type = c("r", "p"), data = IEM_DF
 xyplot(log(po) ~ moist|temp, groups = Time, type = c("r", "p"), data = IEM_DF)
 scatterplotMatrix(~ log(po) + moist + Temp5_Mean, data = IEM_DF, diag = "boxplot", 
                   groups = IEM_DF$temp, by.group = TRUE)
+
 Iml_ancv_po <- lmer(log(po) ~ temp * moist + (1|Time) + (1|Chamber), data = IEM_DF)
 mmm <- stepLmer(Iml_ancv_po)
 Anova(mmm)
