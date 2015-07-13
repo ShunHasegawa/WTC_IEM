@@ -37,10 +37,10 @@ Antt_CntrstDF <- merge(ContrastDF,
                        by = c("Date", "variable"), all.x = TRUE)
 
 
-Antt_CntrstDF$temp <- "amb" # co2 column is required as it's used for mapping
+Antt_CntrstDF$temp <- "amb" # temp column is required as it's used for mapping
 
 # Stat result
-load("output//data//CO2Time_Stat.RData")
+load("output//data//TempTime_Stat.RData")
 
 # ylables for facet_grid
 ylabs <- list(
@@ -59,17 +59,6 @@ p <- WBFig(data = TrtMean, ylab = expression(IEM*-adsorbed~nutrients~(ng~cm^"-2"
   geom_text(data = Antt_CntrstDF, aes(x = Date, y = yval, label = stars), vjust = 0)
 p
 ggsavePP(filename = "output//figs/Manuscript/WTC_IEM", plot = p, width = 6.65, height = 6.65)
-
-############################
-# Fig for BES presentaiton #
-############################
-poster_theme <- theme(panel.grid.major = element_blank(),
-                      panel.grid.minor = element_blank(),
-                      legend.position = "non")
-
-TrtFg <- dlply(TrtMean, .(variable), function(x) PltTmpMean(x) + poster_theme)
-fls <- paste("Output/Figs/BES_Presentation/WTC_IEM_Temp_", c("Nitrate", "Ammonium", "phosphate"),sep = "")
-l_ply(1:3, function(x) ggsavePP(filename = fls[x], plot = TrtFg[[x]], width = 5, height = 3))
 
 ## plot all nutrients ##
 # labels for facet_grid
