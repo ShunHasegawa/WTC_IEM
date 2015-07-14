@@ -48,8 +48,8 @@ visreg(m1, xvar = "moist", by = "temp", overlay = TRUE)
 # Interaction is indicated, but moisture range is quite different. what if I use
 # the samge range of moisture for both treatment
 ddply(IEM_DF, .(temp), summarise, range(moist))
-m2 <- update(m1, subset = moist < 0.14)
-Anova(m2)
+m2 <- update(m1, subset = moist < 0.133)
+Anova(m2, test.statistic = "F")
 visreg(m2, xvar = "moist", by = "temp", overlay = TRUE)
 # interaction is marginally indicated, so include
 
