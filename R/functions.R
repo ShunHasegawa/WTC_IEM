@@ -428,7 +428,7 @@ science_theme <- theme(panel.border = element_rect(colour = "black"),
                        axis.text.x  = element_text(angle=45, vjust= 1, hjust = 1),
                        axis.ticks.length = unit(-.2, "lines"),
                        axis.ticks.margin = unit(.5, "lines"),
-                       legend.position = c(.5, .93), 
+                       legend.position = c(.6, .93), 
                        legend.title = element_blank(),
                        legend.key.width = unit(2.5, "lines"),
                        legend.key = element_blank())
@@ -467,6 +467,8 @@ WBFig <- function(data, ylab, facetLab = ylab_label, figTheme = science_theme, S
   p <- ggplot(data, aes(x = Date, y = Mean, group = temp))
   
   p2 <- p + 
+    geom_vline(xintercept = as.numeric(as.Date("2013-3-18")), 
+               linetype = "dashed", col = "black") +
     geom_line(aes(linetype = temp), position = position_dodge(10)) + 
     geom_errorbar(aes(ymin = Mean - SE, ymax = Mean + SE),
                   width = 0,
@@ -490,12 +492,12 @@ WBFig <- function(data, ylab, facetLab = ylab_label, figTheme = science_theme, S
     facet_grid(variable~., scales= "free_y", labeller= facetLab) +
     figTheme +
     geom_text(data = subset(statDF, predictor != ""), 
-              aes(x = as.Date("2013-3-22"), y = yval, label = predictor),
+              aes(x = as.Date("2013-5-20"), y = yval, label = predictor),
               size = 3, hjust = 1, parse = TRUE) +
     # unless remove [" "] with predictor != "", labels will be messed up due to
     # this empty level
     geom_text(data = statDF, 
-              aes(x = as.Date("2013-4-11"), y = yval, label = p), 
+              aes(x = as.Date("2013-5-20") + 20, y = yval, label = p), 
               size = 3, parse = TRUE)
   p2
   return(p2)
