@@ -57,6 +57,7 @@ p <- WBFig(data = TrtMean, ylab = expression(IEM*-adsorbed~nutrients~(ng~cm^"-2"
            StatRes = Stat_TempTime, 
            StatY = ymaxDF[ , 2]*1.15) +
   geom_text(data = Antt_CntrstDF, aes(x = Date, y = yval, label = stars), vjust = 0)
+  
 p
 ggsavePP(filename = "output//figs/Manuscript/WTC_IEM", plot = p, width = 6.65, height = 6.65)
 
