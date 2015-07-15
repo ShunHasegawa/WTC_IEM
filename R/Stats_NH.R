@@ -44,37 +44,45 @@ WTC_IEM_Ammonium_CntrstDf
 #######################
 # plot soil variables #
 #######################
-# each chamber
-xyplot(nh ~ moist|temp, groups = Chamber, type = c("r", "p"),data = IEM_DF)
-# each time
-xyplot(nh ~ moist|temp, groups = Time, type = c("r", "p"), data = IEM_DF)
 
-scatterplotMatrix(~ nh + moist + Temp5_Mean, data = IEM_DF, diag = "boxplot", 
+# add scale moist and temp
+IEM_DF[, c("ScMoist", "ScTemp")] <- scale(IEM_DF[, c("moist", "Temp5_Mean")])
+
+# inspect interaction
+tt <- tree(nh ~ ScMoist + ScTemp, data = IEM_DF)
+plot(tt)
+text(tt)
+given.temp <- co.intervals(IEM_DF$ScTemp, number = 2, overlap = .1)
+coplot(nh ~ ScMoist|ScTemp, data = IEM_DF, panel = panel.smooth, given.values = given.temp)
+# no temperature effect when dry but negative effects when wet
+
+# check multicollinearity
+vif(lm(nh ~ ScMoist * ScTemp, data = IEM_DF))
+
+scatterplotMatrix(~ nh + ScMoist + ScTemp + I(ScMoist*ScTemp), data = IEM_DF, diag = "boxplot", 
                   groups = IEM_DF$temp, by.group = TRUE)
 
-m1 <- lmer(nh ~ temp * moist + (1|Time) + (1|Chamber), data = IEM_DF)
+# fit interaction
+m1 <- lmer(nh ~ ScMoist * ScTemp  + (1|Time) +  (1|Chamber), data = IEM_DF)
 Anova(m1)
-visreg(m1, xvar = "moist", by = "temp", overlay = TRUE)
-# Interaction is indicated, but moisture range is quite different. what if I use
-# the samge range of moisture for both treatment
-ddply(IEM_DF, .(temp), summarise, range(moist))
-m2 <- update(m1, subset = moist < 0.14)
-Anova(m2)
-# interaction is not indicated, so remove.
+# significant interaction
 
-Iml_ancv_nh <- lmer(nh ~ temp + moist + (1|Time) + (1|Chamber), data = IEM_DF)
-m2 <- update(Iml_ancv_nh, ~. - (1|Time))
-m3 <- update(Iml_ancv_nh, ~. - (1|Chamber))
-anova(Iml_ancv_nh, m2, m3)
+Iml_ancv_nh <- m1
 Anova(Iml_ancv_nh, test.statistic = "F")
 
 Fml_ancv_nh <- Iml_ancv_nh
-
 AnvF_ancv_nh <- Anova(Fml_ancv_nh, test.statistic = "F")
 AnvF_ancv_nh
 
+plot(Fml_ancv_nh)
+qqnorm(resid(Fml_ancv_nh))
+qqline(resid(Fml_ancv_nh))
+
 # visualise
-visreg(Fml_ancv_nh, xvar = "moist", by = "temp", overlay = TRUE)
+a <- visreg(Fml_ancv_nh, xvar = "ScTemp", 
+            points = list(col = IEM_DF$temp), 
+            by = "ScMoist", 
+            breaks = c(-.6, .7))
 
 ## ----Stat_WTC_IEM_Ammonium_Smmry
 # The initial model is:
@@ -91,4 +99,4 @@ AnvF_ancv_nh
 
 Fml_ancv_nh@call
 
-visreg(Fml_ancv_nh, xvar = "moist", by = "temp", overlay = TRUE)
+visreg(Fml_ancv_nh, xvar = "Temp5_Mean", points = list(col = IEM_DF$temp))

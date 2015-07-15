@@ -41,25 +41,30 @@ WTC_IEM_Nitrate_CntrstDf
 #######################
 # plot soil variables #
 #######################
-xyplot(sqrt(no) ~ moist|temp, groups = Chamber, type = c("r", "p"), data = IEM_DF)
-xyplot(sqrt(no) ~ moist|temp, groups = Time, type = c("r", "p"), data = IEM_DF)
-scatterplotMatrix(~ sqrt(no) + moist + Temp5_Mean, data = IEM_DF, diag = "boxplot", 
+# inspect interaction
+tt <- tree(sqrt(no) ~ ScMoist + ScTemp, data = IEM_DF)
+plot(tt)
+text(tt)
+given.temp <- co.intervals(IEM_DF$ScTemp, number = 2, overlap = .1)
+given.moist <- co.intervals(IEM_DF$ScMoist, number = 2, overlap = .1)
+coplot(sqrt(no) ~ ScMoist|ScTemp, data = IEM_DF, panel = panel.smooth, given.values = given.temp)
+coplot(sqrt(no) ~ ScTemp|ScMoist, data = IEM_DF, panel = panel.smooth, given.values = given.moist)
+# no temperature effect when dry but negative effects when wet
+
+# check multicollinearity
+vif(lm(no ~ ScMoist * ScTemp, data = IEM_DF))
+
+scatterplotMatrix(~ sqrt(no) + ScMoist + ScTemp + I(ScMoist*ScTemp), data = IEM_DF, diag = "boxplot", 
                   groups = IEM_DF$temp, by.group = TRUE)
-plot(moist ~ Temp10_Mean, data= IEM_DF, pch = 19, col = temp)
 
-m1 <- lmer(sqrt(no) ~ temp * moist + (1|Time) + (1|Chamber), data = IEM_DF)
-Anova(m1)
-# Interaction is indicated, but moisture range is quite different. what if I use
-# the samge range of moisture for both treatment
-ddply(IEM_DF, .(temp), summarise, range(moist))
-m2 <- update(m1, subset = moist < 0.14)
+# fit interaction
+m1 <- lmer(no ~ ScMoist * ScTemp  + (1|Time) +  (1|Chamber), data = IEM_DF)
+m2 <- lmer(sqrt(no) ~ ScMoist * ScTemp  + (1|Time) +  (1|Chamber), data = IEM_DF)
+ldply(list(m1, m2), r.squared)
 Anova(m2)
-# interaction is indicated anyway. so include interaction
+# significant interaction
 
-Iml_ancv_no <- lmer(sqrt(no) ~ temp * moist + (1|Time) + (1|Chamber), data = IEM_DF)
-m2 <- update(Iml_ancv_no, ~. - (1|Time))
-m3 <- update(Iml_ancv_no, ~. - (1|Chamber))
-anova(Iml_ancv_no, m2, m3)
+Iml_ancv_no <- m2
 Anova(Iml_ancv_no)
 Fml_ancv_no <- Iml_ancv_no
 AnvF_ancv_no <- Anova(Fml_ancv_no, test.statistic = "F")
@@ -71,7 +76,10 @@ qqnorm(resid(Fml_ancv_no))
 qqline(resid(Fml_ancv_no))
 
 # visualise
-visreg(Fml_ancv_no, xvar = "moist", by = "temp", overlay = TRUE)
+a <- visreg(Fml_ancv_no, xvar = "Temp5_Mean", points = list(col = IEM_DF$temp))
+Fit_no <- a$fit
+plot(log(no) ~ Temp5_Mean, data = IEM_DF, col = temp, pch = 19)
+lines(visregFit ~ Temp5_Mean, data = Fit_no)
 
 ## ----Stat_WTC_IEM_Nitrate_Smmry
 # The initial model is:
@@ -96,4 +104,4 @@ Anova(Iml_ancv_no)
 Fml_ancv_no@call
 Anova(Fml_ancv_no)
 AnvF_ancv_no
-visreg(Fml_ancv_no, xvar = "moist", by = "temp", overlay = TRUE)
+visreg(Fml_ancv_no, xvar = "Temp5_Mean", points = list(col = IEM_DF$temp))

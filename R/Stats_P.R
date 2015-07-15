@@ -29,22 +29,29 @@ qqline(resid(Fml_po))
 #######################
 # plot soil variables #
 #######################
-# each chamber
-xyplot(log(po) ~ moist|temp, groups = Chamber, type = c("r", "p"), data = IEM_DF)
-# each time
-xyplot(log(po) ~ moist|temp, groups = Time, type = c("r", "p"), data = IEM_DF)
-scatterplotMatrix(~ log(po) + moist + Temp5_Mean, data = IEM_DF, diag = "boxplot", 
-                  groups = IEM_DF$temp, by.group = TRUE)
+# inspect interaction
+tt <- tree(log(po) ~ ScMoist + ScTemp, data = IEM_DF)
+plot(tt)
+text(tt)
+given.temp <- co.intervals(IEM_DF$ScTemp, number = 2, overlap = .1)
+coplot(log(po) ~ ScMoist|ScTemp, data = IEM_DF, panel = panel.smooth, given.values = given.temp)# each chamber
 
-Iml_ancv_po <- lmer(log(po) ~ temp * moist + (1|Time) + (1|Chamber), data = IEM_DF)
-mmm <- stepLmer(Iml_ancv_po)
-Anova(mmm)
-m2 <- update(Iml_ancv_po, ~. - (1|Time))
-m3 <- update(Iml_ancv_po, ~. - (1|Chamber))
-# m3 is best but it's repeated measure, so keep chamber anyway..
+# fit interaction
+m1 <- lmer(log(po) ~ ScMoist * ScTemp  + (1|Time) +  (1|Chamber), data = IEM_DF)
+Anova(m1)
+# no interaction
+
+Iml_ancv_po <- lmer(log(po) ~ Temp5_Mean + moist + (1|Time) + (1|Chamber), data = IEM_DF)
 Anova(Iml_ancv_po)
 Fml_ancv_po <- stepLmer(Iml_ancv_po)
 AnvF_ancv_po <- Anova(Fml_ancv_po, test.statistic = "F")
+AnvF_ancv_po
+
+# visualise
+a <- visreg(Fml_ancv_po, xvar = "Temp5_Mean", points = list(col = IEM_DF$temp))
+Fit_po <- a$fit
+plot(log(po) ~ Temp5_Mean, data = IEM_DF, col = temp, pch = 19)
+lines(visregFit ~ Temp5_Mean, data = Fit_po)
 
 # model diagnosis
 plot(Fml_ancv_po)
@@ -73,3 +80,5 @@ Fml_ancv_po@call
 Anova(Fml_ancv_po)
 # F test
 AnvF_ancv_po
+
+visreg(Fml_ancv_po, xvar = "Temp5_Mean", points = list(col = IEM_DF$temp))
