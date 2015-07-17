@@ -21,10 +21,5 @@
 read_chunk("R/Stats_NPRatio.R")
 @
 
-<<Stat_WTC_IEM_NPRatio_Smmry, echo=TRUE, results='markup'>>=
+<<Stat_WTC_IEM_NPRatio_Smmry, echo=TRUE, results='markup', fig.width = 6.5, fig.height = 3>>=
 @
-
-\begin{figure}[!h]\label{figure:temp.iem.NPRatio}
-\includegraphics{../Output/Figs/Manuscript/WTC_NPRatioMoist.pdf}
-\caption{N:P ratios against soil moisutre}
-\end{figure}
