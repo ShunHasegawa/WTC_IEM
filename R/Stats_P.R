@@ -36,20 +36,17 @@ xyplot(log(po) ~ moist|temp, groups = Time, type = c("r", "p"), data = IEM_DF)
 scatterplotMatrix(~ log(po) + moist + Temp5_Mean, data = IEM_DF, diag = "boxplot", 
                   groups = IEM_DF$temp, by.group = TRUE)
 
-Iml_ancv_po <- lmer(log(po) ~ temp * moist + (1|Time) + (1|Chamber), data = IEM_DF)
-mmm <- stepLmer(Iml_ancv_po)
-Anova(mmm)
-m2 <- update(Iml_ancv_po, ~. - (1|Time))
-m3 <- update(Iml_ancv_po, ~. - (1|Chamber))
-# m3 is best but it's repeated measure, so keep chamber anyway..
-Anova(Iml_ancv_po)
-Fml_ancv_po <- stepLmer(Iml_ancv_po)
+Iml_ancv_po <- lmer(log(po) ~ temp * (moist + Temp5_Mean) + (1|Chamber), data = IEM_DF)
+Fml_ancv_po <- stepLmer(Iml_ancv_po, alpha.fixed = .1)
 AnvF_ancv_po <- Anova(Fml_ancv_po, test.statistic = "F")
+AnvF_ancv_po
 
 # model diagnosis
 plot(Fml_ancv_po)
 qqnorm(resid(Fml_ancv_po))
 qqline(resid(Fml_ancv_po))
+
+visreg(Fml_ancv_po, xvar = "Temp5_Mean", points = list(col = IEM_DF$temp))
 
 ## ----Stat_WTC_IEM_Phosphate_Smmry
 # The initial model is:
@@ -73,3 +70,5 @@ Fml_ancv_po@call
 Anova(Fml_ancv_po)
 # F test
 AnvF_ancv_po
+
+visreg(Fml_ancv_po, xvar = "Temp5_Mean", points = list(col = IEM_DF$temp))

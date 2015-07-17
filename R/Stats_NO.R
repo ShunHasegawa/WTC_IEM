@@ -47,21 +47,9 @@ scatterplotMatrix(~ sqrt(no) + moist + Temp5_Mean, data = IEM_DF, diag = "boxplo
                   groups = IEM_DF$temp, by.group = TRUE)
 plot(moist ~ Temp10_Mean, data= IEM_DF, pch = 19, col = temp)
 
-m1 <- lmer(sqrt(no) ~ temp * moist + (1|Time) + (1|Chamber), data = IEM_DF)
-Anova(m1)
-# Interaction is indicated, but moisture range is quite different. what if I use
-# the samge range of moisture for both treatment
-ddply(IEM_DF, .(temp), summarise, range(moist))
-m2 <- update(m1, subset = moist < 0.14)
-Anova(m2)
-# interaction is indicated anyway. so include interaction
+Iml_ancv_no <- lmer(sqrt(no) ~ temp * (moist + Temp5_Mean) + (1|Chamber), data = IEM_DF)
+Fml_ancv_no <- stepLmer(m1, alpha.fixed = .1)
 
-Iml_ancv_no <- lmer(sqrt(no) ~ temp * moist + (1|Time) + (1|Chamber), data = IEM_DF)
-m2 <- update(Iml_ancv_no, ~. - (1|Time))
-m3 <- update(Iml_ancv_no, ~. - (1|Chamber))
-anova(Iml_ancv_no, m2, m3)
-Anova(Iml_ancv_no)
-Fml_ancv_no <- Iml_ancv_no
 AnvF_ancv_no <- Anova(Fml_ancv_no, test.statistic = "F")
 AnvF_ancv_no
 
@@ -71,7 +59,9 @@ qqnorm(resid(Fml_ancv_no))
 qqline(resid(Fml_ancv_no))
 
 # visualise
+par(mfrow = c(1, 2))
 visreg(Fml_ancv_no, xvar = "moist", by = "temp", overlay = TRUE)
+visreg(Fml_ancv_no, xvar = "Temp5_Mean", by = "temp", overlay = TRUE)
 
 ## ----Stat_WTC_IEM_Nitrate_Smmry
 # The initial model is:
@@ -96,4 +86,7 @@ Anova(Iml_ancv_no)
 Fml_ancv_no@call
 Anova(Fml_ancv_no)
 AnvF_ancv_no
+
+par(mfrow = c(1, 2))
 visreg(Fml_ancv_no, xvar = "moist", by = "temp", overlay = TRUE)
+visreg(Fml_ancv_no, xvar = "Temp5_Mean", by = "temp", overlay = TRUE)

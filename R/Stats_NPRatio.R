@@ -42,58 +42,19 @@ xyplot(NP ~ moist|Time, type = c("r", "p"), data = IEM_DF)
 scatterplotMatrix(~NP + moist + Temp5_Mean|temp, data = IEM_DF, diag = "boxplot")
 scatterplotMatrix(~log(NP) + log(moist) + Temp5_Mean|temp, data = IEM_DF, diag = "boxplot")
 
-m1 <- lmer(log(NP) ~ temp * log(moist) + (1|Time) + (1|Chamber), data = IEM_DF)
-Anova(m1)
-visreg(m1, xvar = "moist", by = "temp", overlay = TRUE)
-# Interaction is indicated, but moisture range is quite different. what if I use
-# the samge range of moisture for both treatment
-ddply(IEM_DF, .(temp), summarise, range(moist))
-m2 <- update(m1, subset = moist < 0.133)
-Anova(m2, test.statistic = "F")
-visreg(m2, xvar = "moist", by = "temp", overlay = TRUE)
-# interaction is marginally indicated, so include
-
-Iml_ancv_NP <- lmer(log(NP) ~ temp * log(moist) + (1|Time) + (1|Chamber), data = IEM_DF)
-m2 <- update(Iml_ancv_NP, ~. - (1|Time))
-m3 <- update(Iml_ancv_NP, ~. - (1|Chamber))
-anova(Iml_ancv_NP, m2, m3)
-
-Fml_ancv_NP <- Iml_ancv_NP
-summary(Fml_ancv_NP)
+Iml_ancv_NP <- lmer(log(NP) ~ temp * (log(moist) + Temp5_Mean) + (1|Chamber), data = IEM_DF)
+Fml_ancv_NP <- lmer(log(NP) ~ temp * log(moist) + Temp5_Mean + (1|Chamber), data = IEM_DF)
 AnvF_ancv_NP <- Anova(Fml_ancv_NP, test.statistic = "F")
 AnvF_ancv_NP
-r.squared(Fml_ancv_NP)
+
+# model diagnosis
+plot(Fml_ancv_NP)
+qqnorm(resid(Fml_ancv_NP))
+qqline(resid(Fml_ancv_NP))
+
+par(mfrow = c(1, 2))
 visreg(Fml_ancv_NP, xvar = "moist", by = "temp", overlay = TRUE)
-
-# Estimate 95% confidence intervals for this model
-range(IEM_DF$moist)
-expDF <- expand.grid(temp = c("amb", "elev"), moist = seq(.06, .2, length.out = 50))
-bb <- bootMer(Fml_ancv_NP, FUN=function(x) predict(x, expDF, re.form = NA), nsim=500)
-lci <- apply(bb$t, 2, quantile, 0.025)
-uci <- apply(bb$t, 2, quantile, 0.975)
-PredVal <- bb$t0
-PredDF <- cbind(lci, uci, PredVal, expDF)
-
-theme_set(theme_bw())
-p <- ggplot(PredDF, aes(x = log(moist * 100), y = PredVal, col = temp, fill = temp, group = temp))
-p2 <- p + 
-  geom_line() +
-  geom_ribbon(aes(ymin = lci, ymax = uci), alpha = .4, col = NA) +
-  geom_point(data = IEM_DF, aes(x = log(moist * 100), y = log(NP)), size = 3, alpha = .6) +
-  scale_colour_manual(values = c("blue", "red"), labels = c("Ambient", "eTemp")) +
-  scale_fill_manual(values = c("blue", "red"), labels = c("Ambient", "eTemp")) +
-  theme(panel.border = element_rect(colour = "black"),
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(),
-        axis.ticks.length = unit(-.2, "lines"),
-        axis.ticks.margin = unit(.5, "lines"),
-        legend.position = c(.19, .85), 
-        legend.title = element_blank(),
-        legend.key.width = unit(2.5, "lines"),
-        legend.key = element_blank()) + 
-  labs(x = "log(Moisture (%))", y = "log(N:P ratio)")
-p2
-ggsavePP(plot = p2, filename = "Output/Figs/Manuscript/WTC_NPRatioMoist", width = 4, height = 3)  
+visreg(Fml_ancv_NP, xvar = "Temp5_Mean")
 
 ## ----Stat_WTC_IEM_NPRatio_Smmry
 Iml_NP@call
@@ -114,3 +75,7 @@ Anova(Iml_ancv_NP)
 
 # F test
 AnvF_ancv_NP
+
+par(mfrow = c(1, 2))
+visreg(Fml_ancv_NP, xvar = "moist", by = "temp", overlay = TRUE)
+visreg(Fml_ancv_NP, xvar = "Temp5_Mean")
