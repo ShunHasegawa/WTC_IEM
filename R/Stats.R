@@ -89,3 +89,17 @@ TempTimeStatList <- list(no = AnvF_no, nh = AnvF_nh, po = AnvF_po)
 Stat_TempTime <- ldply(names(TempTimeStatList), 
                       function(x) StatTable(TempTimeStatList[[x]], variable = x))
 save(Stat_TempTime, file = "output//data/TempTime_Stat.RData")
+
+############
+## ANCOVA ##
+############
+# change row names
+AnvF_ancv_NP2 <- AnvF_ancv_NP
+row.names(AnvF_ancv_NP2) <- c("temp", "moist", "Temp5_Mean", "temp:moist")
+
+AncvLst <- list('no' = AnvF_ancv_no, 
+                'nh' = AnvF_ancv_nh, 
+                'po' = AnvF_ancv_po,
+                'np' = AnvF_ancv_NP2)
+AncvRes <- AncvSmmryTbl(AncvRes = AncvLst, predictor = row.names(Anova(Iml_ancv_no)))
+write.csv(AncvRes,  file = "Output/Table/SummaryANCOVA.csv", row.names = FALSE)
