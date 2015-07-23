@@ -72,7 +72,11 @@ qqnorm(resid(Fml_ancv_nh))
 qqline(resid(Fml_ancv_nh))
 
 # visualise
-visreg(Fml_ancv_nh, xvar = "Temp5_Mean", by = "temp", overlay = TRUE)
+TransVirsreg(visreg(Fml_ancv_nh, xvar = "Temp5_Mean", by = "temp", plot = FALSE),
+             overlay = TRUE, trans = exp,
+             point = list(col = c(1, 2), cex = 1), 
+             line =  list(col = c(1, 2)))
+
 
 ## ----Stat_WTC_IEM_Ammonium_Smmry
 # The initial model is:
@@ -89,4 +93,8 @@ AnvF_ancv_nh
 
 Fml_ancv_nh@call
 
-visreg(Fml_ancv_nh, xvar = "Temp5_Mean", by = "temp", overlay = TRUE)
+TransVirsreg(visreg(Fml_ancv_nh, xvar = "Temp5_Mean", by = "temp", plot = FALSE),
+             overlay = TRUE, trans = exp,
+             point = list(col = c(1, 2), cex = 1), 
+             line =  list(col = c(1, 2)))
+

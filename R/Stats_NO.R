@@ -60,8 +60,14 @@ qqline(resid(Fml_ancv_no))
 
 # visualise
 par(mfrow = c(1, 2))
-visreg(Fml_ancv_no, xvar = "moist", by = "temp", overlay = TRUE)
-visreg(Fml_ancv_no, xvar = "Temp5_Mean", by = "temp", overlay = TRUE)
+TransVirsreg(visreg(Fml_ancv_no, xvar = "moist", by = "temp", plot = FALSE), 
+             trans = function(x) x^2, overlay = TRUE, 
+             point = list(col = c(1, 2), cex = 1), 
+             line =  list(col = c(1, 2)))
+TransVirsreg(visreg(Fml_ancv_no, xvar = "Temp5_Mean", by = "temp", plot = FALSE), 
+             trans = function(x) x^2, overlay = TRUE, 
+             point = list(col = c(1, 2), cex = 1), 
+             line =  list(col = c(1, 2)))
 
 ## ----Stat_WTC_IEM_Nitrate_Smmry
 # The initial model is:
@@ -88,5 +94,12 @@ Anova(Fml_ancv_no)
 AnvF_ancv_no
 
 par(mfrow = c(1, 2))
-visreg(Fml_ancv_no, xvar = "moist", by = "temp", overlay = TRUE)
-visreg(Fml_ancv_no, xvar = "Temp5_Mean", by = "temp", overlay = TRUE)
+par(mfrow = c(1, 2))
+TransVirsreg(visreg(Fml_ancv_no, xvar = "moist", by = "temp", plot = FALSE), 
+             trans = function(x) x^2, overlay = TRUE, 
+             point = list(col = c(1, 2), cex = 1), 
+             line =  list(col = c(1, 2)))
+TransVirsreg(visreg(Fml_ancv_no, xvar = "Temp5_Mean", by = "temp", plot = FALSE), 
+             trans = function(x) x^2, overlay = TRUE, 
+             point = list(col = c(1, 2), cex = 1), 
+             line =  list(col = c(1, 2)))

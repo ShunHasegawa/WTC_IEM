@@ -46,7 +46,8 @@ plot(Fml_ancv_po)
 qqnorm(resid(Fml_ancv_po))
 qqline(resid(Fml_ancv_po))
 
-visreg(Fml_ancv_po, xvar = "Temp5_Mean", points = list(col = IEM_DF$temp))
+TransVirsreg(visreg(Fml_ancv_po, xvar = "Temp5_Mean", plot = FALSE),
+             trans = exp, point = list(col = c(1, 2), cex = 1))
 
 ## ----Stat_WTC_IEM_Phosphate_Smmry
 # The initial model is:
@@ -71,4 +72,5 @@ Anova(Fml_ancv_po)
 # F test
 AnvF_ancv_po
 
-visreg(Fml_ancv_po, xvar = "Temp5_Mean", points = list(col = IEM_DF$temp))
+TransVirsreg(visreg(Fml_ancv_po, xvar = "Temp5_Mean", plot = FALSE),
+             trans = exp, point = list(col = c(1, 2), cex = 1))
