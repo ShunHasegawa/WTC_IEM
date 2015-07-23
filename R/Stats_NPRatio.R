@@ -53,8 +53,16 @@ qqnorm(resid(Fml_ancv_NP))
 qqline(resid(Fml_ancv_NP))
 
 par(mfrow = c(1, 2))
-visreg(Fml_ancv_NP, xvar = "moist", by = "temp", overlay = TRUE)
-visreg(Fml_ancv_NP, xvar = "Temp5_Mean")
+TransVirsreg(visreg(Fml_ancv_NP, xvar = "moist", by = "temp", plot = FALSE), 
+             overlay = TRUE,
+             trans = exp, 
+             point = list(col = c(1, 2), cex = 1),
+             line = list(col = c(1, 2)))
+TransVirsreg(visreg(Fml_ancv_NP, xvar = "Temp5_Mean", by = "temp", plot = FALSE), 
+             overlay = TRUE,
+             trans = exp, 
+             point = list(col = c(1, 2), cex = 1),
+             line = list(col = c(1, 2)))
 
 ## ----Stat_WTC_IEM_NPRatio_Smmry
 Iml_NP@call
@@ -77,5 +85,13 @@ Anova(Iml_ancv_NP)
 AnvF_ancv_NP
 
 par(mfrow = c(1, 2))
-visreg(Fml_ancv_NP, xvar = "moist", by = "temp", overlay = TRUE)
-visreg(Fml_ancv_NP, xvar = "Temp5_Mean")
+TransVirsreg(visreg(Fml_ancv_NP, xvar = "moist", by = "temp", plot = FALSE), 
+             overlay = TRUE,
+             trans = exp, 
+             point = list(col = c(1, 2), cex = 1),
+             line = list(col = c(1, 2)))
+TransVirsreg(visreg(Fml_ancv_NP, xvar = "Temp5_Mean", by = "temp", plot = FALSE), 
+             overlay = TRUE,
+             trans = exp, 
+             point = list(col = c(1, 2), cex = 1),
+             line = list(col = c(1, 2)))
