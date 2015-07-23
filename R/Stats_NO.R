@@ -48,7 +48,7 @@ scatterplotMatrix(~ sqrt(no) + moist + Temp5_Mean, data = IEM_DF, diag = "boxplo
 plot(moist ~ Temp10_Mean, data= IEM_DF, pch = 19, col = temp)
 
 Iml_ancv_no <- lmer(sqrt(no) ~ temp * (moist + Temp5_Mean) + (1|Chamber), data = IEM_DF)
-Fml_ancv_no <- stepLmer(m1, alpha.fixed = .1)
+Fml_ancv_no <- stepLmer(Iml_ancv_no, alpha.fixed = .1)
 
 AnvF_ancv_no <- Anova(Fml_ancv_no, test.statistic = "F")
 AnvF_ancv_no
