@@ -384,7 +384,7 @@ StatTable <- function(x, variable) { # x is anova result
   
   # relabel for plotting
   result$predictor <- factor(result$predictor, 
-                             labels = c("", "Temp", "Time", "Temp~x~Time"), 
+                             labels = c("", "Temp[TRT]", "Time", "Temp[TRT]~x~Time"), 
                              levels = c("", "temp", "Time", "temp:Time"))
   result$variable <- variable
   result <- result[order(result$predictor), ]
@@ -492,12 +492,12 @@ WBFig <- function(data, ylab, facetLab = ylab_label, figTheme = science_theme, S
     facet_grid(variable~., scales= "free_y", labeller= facetLab) +
     figTheme +
     geom_text(data = subset(statDF, predictor != ""), 
-              aes(x = as.Date("2013-5-20"), y = yval, label = predictor),
+              aes(x = as.Date("2013-5-28"), y = yval, label = predictor),
               size = 3, hjust = 1, parse = TRUE) +
     # unless remove [" "] with predictor != "", labels will be messed up due to
     # this empty level
     geom_text(data = statDF, 
-              aes(x = as.Date("2013-5-20") + 20, y = yval, label = p), 
+              aes(x = as.Date("2013-5-28") + 20, y = yval, label = p), 
               size = 3, parse = TRUE)
   p2
   return(p2)
