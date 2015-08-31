@@ -9,6 +9,7 @@
 # NP ratio #
 ############
 bxplts(value= "gmNP", data= IEM_DF)
+bxplts(value= "NP", data= IEM_DF)
 # use log (geometric mean)
 
 Iml_NP <- lmer(sqrt(gmNP) ~ temp * Time + (1|Chamber), data = IEM_DF)
@@ -33,17 +34,18 @@ qqline(resid(Fml_NP))
 # plot soil variables #
 #######################
 # each chamber
-xyplot(NP ~ moist|temp, groups = Chamber, type = c("r", "p"), data = IEM_DF)
-xyplot(NP ~ moist|Chamber, type = c("r", "p"), data = IEM_DF)
+xyplot(gmNP ~ moist|temp, groups = Chamber, type = c("r", "p"), data = IEM_DF)
+xyplot(gmNP ~ moist|Chamber, type = c("r", "p"), data = IEM_DF)
 # each time
-xyplot(NP ~ moist|temp, groups = Time, type = c("r", "p"), data = IEM_DF)
-xyplot(NP ~ moist|Time, type = c("r", "p"), data = IEM_DF)
+xyplot(gmNP ~ moist|temp, groups = Time, type = c("r", "p"), data = IEM_DF)
+xyplot(gmNP ~ moist|Time, type = c("r", "p"), data = IEM_DF)
 
-scatterplotMatrix(~NP + moist + Temp5_Mean|temp, data = IEM_DF, diag = "boxplot")
-scatterplotMatrix(~log(NP) + log(moist) + Temp5_Mean|temp, data = IEM_DF, diag = "boxplot")
+scatterplotMatrix(~gmNP + moist + Temp5_Mean|temp, data = IEM_DF, diag = "boxplot")
+scatterplotMatrix(~log(gmNP) + log(moist) + Temp5_Mean|temp, data = IEM_DF, diag = "boxplot")
 
-Iml_ancv_NP <- lmer(log(NP) ~ temp * (log(moist) + Temp5_Mean) + (1|Chamber), data = IEM_DF)
-Fml_ancv_NP <- lmer(log(NP) ~ temp * log(moist) + Temp5_Mean + (1|Chamber), data = IEM_DF)
+Iml_ancv_NP <- lmer(log(gmNP) ~ temp * (moist + Temp5_Mean) + (1|Chamber), data = IEM_DF)
+Anova(Iml_ancv_NP)
+Fml_ancv_NP <- stepLmer(Iml_ancv_NP, alpha.fixed = .1)
 AnvF_ancv_NP <- Anova(Fml_ancv_NP, test.statistic = "F")
 AnvF_ancv_NP
 
